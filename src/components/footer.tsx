@@ -1,19 +1,12 @@
 "use client";
+
+import Logo from "@/components/logo";
+
 const Footer = () => (
   <footer className="bg-primary text-primary-foreground pt-16">
     <div className="container mx-auto px-4">
       <div className="grid md:grid-cols-4 gap-8">
         <div>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-              <span className="font-display text-sm font-bold text-accent-foreground">
-                RH
-              </span>
-            </div>
-            <span className="font-display text-lg font-bold">
-              CapitalHumano
-            </span>
-          </div>
           <p className="text-sm text-primary-foreground/60 leading-relaxed">
             A plataforma líder em capacitação de RH e treinamentos corporativos
             no Brasil.

@@ -27,9 +27,9 @@ const Hero = () => (
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          <span className="inline-block bg-accent/20 text-accent text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
+          {/* <span className="inline-block bg-accent/20 text-accent text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
             🚀 Nova turma de Gestão de Pessoas aberta
-          </span>
+          </span> */}
 
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-primary-foreground">
             Transforme o RH da sua empresa em{" "}
@@ -53,7 +53,7 @@ const Hero = () => (
             <Button
               size="lg"
               variant="outline"
-              className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 font-semibold text-base"
+              className="border-primary-foreground/30 hover:bg-primary-foreground/30 text-secondary bg-primary-foreground/10 font-semibold text-base hover:text-secondary"
             >
               Ver Cursos
             </Button>

@@ -2,31 +2,23 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Logo from "@/components/logo";
+import { SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/nextjs";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { isLoaded, isSignedIn } = useAuth();
 
   const links = [
     { label: "Início", href: "#" },
     { label: "Cursos", href: "#cursos" },
     { label: "Planos", href: "#planos" },
-    { label: "Sobre", href: "#sobre" },
   ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
-        <a href="#" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="font-display text-sm font-bold text-primary-foreground">
-              RH
-            </span>
-          </div>
-          <span className="font-display text-xl font-bold text-foreground">
-            CapitalHumano<span className="text-accent">.</span>
-          </span>
-        </a>
-
+        <Logo />
         <div className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <a
@@ -38,17 +30,29 @@ const Navbar = () => {
             </a>
           ))}
         </div>
-
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="ghost" size="sm" className="text-muted-foreground">
-            Entrar
-          </Button>
-          <Button
-            size="sm"
-            className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold shadow-sm"
-          >
-            Começar Agora
-          </Button>
+          {isLoaded && !isSignedIn && (
+            <>
+              <SignInButton mode="modal">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-muted-foreground"
+                >
+                  Entrar
+                </Button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <Button
+                  size="sm"
+                  className="bg-accent text-accent-foreground hover:bg-accent/70 font-semibold shadow-sm"
+                >
+                  Começar Agora
+                </Button>
+              </SignUpButton>
+            </>
+          )}
+          {isLoaded && isSignedIn && <UserButton afterSignOutUrl="/" />}
         </div>
 
         <button
@@ -72,15 +76,32 @@ const Navbar = () => {
             </a>
           ))}
           <div className="flex gap-2 pt-2">
-            <Button variant="ghost" size="sm" className="text-muted-foreground">
-              Entrar
-            </Button>
-            <Button
-              size="sm"
-              className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold"
-            >
-              Começar Agora
-            </Button>
+            {isLoaded && !isSignedIn && (
+              <>
+                <SignInButton mode="modal">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground w-full"
+                  >
+                    Entrar
+                  </Button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <Button
+                    size="sm"
+                    className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold w-full"
+                  >
+                    Começar Agora
+                  </Button>
+                </SignUpButton>
+              </>
+            )}
+            {isLoaded && isSignedIn && (
+              <div className="flex items-center justify-center w-full py-2">
+                <UserButton afterSignOutUrl="/" />
+              </div>
+            )}
           </div>
         </div>
       )}
