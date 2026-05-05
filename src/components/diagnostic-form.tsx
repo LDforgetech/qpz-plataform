@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
@@ -57,10 +59,17 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
 
-  // States para a API
-  const [sections, setSections] = useState<FormSection[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Busca de dados com React Query
+  const {
+    data: sections = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery<FormSection[], Error>({
+    queryKey: ["diagnostic-form"],
+    queryFn: () => api.get("form"), // Usa o wrapper com a rota /form
+    enabled: open, // Só faz a requisição se o modal estiver aberto
+  });
 
   // Zod Schema dinâmico
   const [schema, setSchema] = useState<z.ZodObject<any, any>>(z.object({}));
@@ -76,22 +85,13 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
     defaultValues: {},
   });
 
-  // Função para buscar dados da API
-  const fetchQuestions = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      // Aqui você substitui pela chamada da sua API real
-      const res = await fetch("http://localhost:8000/api/form");
-      const data = await res.json();
-
-      setSections(data);
-
+  useEffect(() => {
+    if (sections && sections.length > 0) {
       // Gerar schema do Zod baseado nas perguntas retornadas
       const schemaShape: Record<string, z.ZodTypeAny> = {};
       const defaultValues: Record<string, string> = {};
 
-      data.forEach((section) => {
+      sections.forEach((section) => {
         section.questions.forEach((q) => {
           const fieldName = `question_${q.id}`;
           schemaShape[fieldName] = z
@@ -104,20 +104,13 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
       });
 
       setSchema(z.object(schemaShape));
-      reset(defaultValues); // Inicializar o formulário com campos vazios
-    } catch (err) {
-      setError("Falha ao carregar o formulário. Tente novamente.");
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    if (open && sections.length === 0) {
-      fetchQuestions();
+      // Só aplica o reset se ainda estiver no passo 0 (evita resetar dados se a query refetching)
+      if (step === 0 && !submitted) {
+        reset(defaultValues);
+      }
     }
-  }, [open, sections.length]);
+  }, [sections, reset, step, submitted]);
 
   const totalSteps = sections.length;
   const progress = totalSteps > 0 ? ((step + 1) / totalSteps) * 100 : 0;
@@ -183,8 +176,11 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
           <div className="flex flex-col items-center justify-center p-20 text-center">
             <AlertCircle className="w-12 h-12 text-destructive mb-4" />
             <h3 className="font-bold text-lg mb-2">Ops, algo deu errado</h3>
-            <p className="text-muted-foreground mb-6">{error}</p>
-            <Button onClick={fetchQuestions} variant="outline">
+            <p className="text-muted-foreground mb-6">
+              {error?.message ||
+                "Falha ao carregar o formulário. Tente novamente."}
+            </p>
+            <Button onClick={() => refetch()} variant="outline">
               Tentar novamente
             </Button>
           </div>
