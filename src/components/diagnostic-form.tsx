@@ -21,7 +21,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -167,6 +166,12 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogOverlay className="bg-black/60" />
       <DialogContent className="sm:max-w-[70vw] max-w-[90vw] p-0 gap-0 overflow-hidden max-h-[90vh] flex flex-col">
+        <DialogHeader className="sr-only">
+          <DialogTitle>Formulário de Diagnóstico</DialogTitle>
+          <DialogDescription>
+            Avaliação detalhada para diagnóstico.
+          </DialogDescription>
+        </DialogHeader>
         {isLoading ? (
           <div className="flex flex-col items-center justify-center p-20 text-center">
             <Loader2 className="w-10 h-10 animate-spin text-accent mb-4" />
@@ -229,12 +234,6 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
                   transition={{ duration: 0.25 }}
                   className="space-y-8"
                 >
-                  <div className="flex items-center gap-3">
-                    <Badge variant="secondary" className="text-xs">
-                      SEÇÃO {sections[step].id}
-                    </Badge>
-                  </div>
-
                   {/* Renderizando as perguntas dinamicamente */}
                   {sections[step].questions.map((question) => {
                     const fieldName = `question_${question.id}`;

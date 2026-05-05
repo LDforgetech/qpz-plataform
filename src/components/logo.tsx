@@ -10,8 +10,13 @@ export default function Logo({
   height?: number;
 }) {
   return (
-    <a href="/.">
-      <Image width={width} height={height} src={logo} alt="teste" />
+    <a href="/." {...props}>
+      <Image
+        width={width}
+        height={height}
+        src={logo}
+        alt="Logo Quatro ponto zero"
+      />
     </a>
   );
 }

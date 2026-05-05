@@ -12,17 +12,19 @@ import {
   BookOpen,
   ChevronRight,
   Calendar,
-  LogOut,
-  User,
   Home,
   Library,
   BarChart3,
+  AwardIcon,
+  BookUser,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import DiagnosticForm from "@/components/diagnostic-form";
+import Logo from "@/components/logo";
+import { UserButton, useUser } from "@clerk/nextjs";
 
 const inProgress = [
   {
@@ -62,14 +64,15 @@ const stats = [
 ];
 
 const Dashboard = () => {
+  const { isLoaded, isSignedIn, user } = useUser();
   const [activeNav, setActiveNav] = useState("inicio");
   const [diagnosticOpen, setDiagnosticOpen] = useState(false);
 
   const navItems = [
     { id: "inicio", label: "Início", icon: Home },
-    { id: "biblioteca", label: "Biblioteca", icon: Library },
     { id: "trilha", label: "Minha Trilha", icon: Sparkles },
-    { id: "progresso", label: "Progresso", icon: BarChart3 },
+    { id: "certificados", label: "Certificados", icon: AwardIcon },
+    { id: "contato", label: "Contato", icon: BookUser },
   ];
 
   const planExpiresIn = 247;
@@ -79,16 +82,7 @@ const Dashboard = () => {
       {/* Sidebar */}
       <aside className="hidden lg:flex flex-col w-64 bg-card border-r border-border fixed h-screen">
         <div className="p-6 border-b border-border">
-          {/* <Link to="/" className="flex items-center gap-2"> */}
-          <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
-            <span className="font-display text-sm font-bold text-primary-foreground">
-              RH
-            </span>
-          </div>
-          <span className="font-display text-lg font-bold text-foreground">
-            CapitalHumano<span className="text-accent">.</span>
-          </span>
-          {/* </Link> */}
+          <Logo />
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
@@ -146,7 +140,7 @@ const Dashboard = () => {
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
               />
               <Input
-                placeholder="Buscar cursos, módulos, temas..."
+                placeholder="Buscar cursos e/ou trilhas"
                 className="pl-10 bg-secondary border-0"
               />
             </div>
@@ -159,28 +153,9 @@ const Dashboard = () => {
               >
                 <Bell size={18} />
               </Button>
-              <div className="hidden sm:flex items-center gap-3 pl-3 border-l border-border">
-                <div className="text-right">
-                  <p className="text-sm font-semibold text-foreground">
-                    Olá, Marina
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    marina@empresa.com
-                  </p>
-                </div>
-                <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-accent-foreground font-semibold text-sm">
-                  M
-                </div>
-              </div>
-              {/* <Link to="/"> */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground"
-              >
-                <LogOut size={18} />
-              </Button>
-              {/* </Link> */}
+              {isLoaded && isSignedIn && (
+                <UserButton afterSignOutUrl="/" showName />
+              )}
             </div>
           </div>
         </header>
@@ -194,12 +169,42 @@ const Dashboard = () => {
             className="mb-8"
           >
             <h1 className="text-3xl font-display font-bold text-foreground">
-              Bom te ver de volta, Marina 👋
+              Bom te ver de volta, {user?.firstName} 👋
             </h1>
             <p className="text-muted-foreground mt-1">
               Continue de onde parou e mantenha sua sequência de estudos.
             </p>
           </motion.div>
+
+          {/* Trilha personalizada CTA */}
+          <motion.section
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mb-12 bg-gradient-to-br from-primary to-navy-dark rounded-2xl p-8 text-primary-foreground relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl -mr-20 -mt-20" />
+            <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="flex-1">
+                <h2 className="text-2xl md:text-3xl font-display font-bold mb-2">
+                  Trace seu perfil profissional
+                </h2>
+                <p className="opacity-80 max-w-xl">
+                  Responda um diagnóstico rápido e receba uma trilha de estudos
+                  personalizada com base no seu momento de carreira.
+                </p>
+              </div>
+              <Button
+                size="lg"
+                onClick={() => setDiagnosticOpen(true)}
+                className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold shadow-[var(--shadow-gold)]"
+              >
+                <Sparkles size={18} />
+                Iniciar diagnóstico
+              </Button>
+            </div>
+          </motion.section>
 
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
@@ -230,7 +235,7 @@ const Dashboard = () => {
           </div>
 
           {/* Continue assistindo */}
-          <section className="mb-12">
+          {/* <section className="mb-12">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-xl font-display font-bold text-foreground">
                 Continue de onde parou
@@ -286,51 +291,15 @@ const Dashboard = () => {
                 </motion.div>
               ))}
             </div>
-          </section>
-
-          {/* Trilha personalizada CTA */}
-          <motion.section
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mb-12 bg-gradient-to-br from-primary to-navy-dark rounded-2xl p-8 text-primary-foreground relative overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl -mr-20 -mt-20" />
-            <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              <div className="flex-1">
-                <Badge className="bg-accent text-accent-foreground mb-3">
-                  Exclusivo para alunos
-                </Badge>
-                <h2 className="text-2xl md:text-3xl font-display font-bold mb-2">
-                  Trace seu perfil profissional
-                </h2>
-                <p className="opacity-80 max-w-xl">
-                  Responda um diagnóstico rápido e receba uma trilha de estudos
-                  personalizada com base no seu momento de carreira.
-                </p>
-              </div>
-              <Button
-                size="lg"
-                onClick={() => setDiagnosticOpen(true)}
-                className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold shadow-[var(--shadow-gold)]"
-              >
-                <Sparkles size={18} />
-                Iniciar diagnóstico
-              </Button>
-            </div>
-          </motion.section>
+          </section> */}
 
           {/* Recomendados */}
           <section className="mb-12">
             <div className="flex items-center justify-between mb-5">
               <div>
                 <h2 className="text-xl font-display font-bold text-foreground">
-                  Recomendados para você
+                  Catálogo de cursos
                 </h2>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Selecionados com base nos seus interesses
-                </p>
               </div>
               <a
                 href="#"
