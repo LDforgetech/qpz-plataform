@@ -5,7 +5,7 @@ import { api } from "@/lib/api";
 export function useCourses() {
   return useQuery({
     queryKey: ["courses"],
-    queryFn: () => api.get("/courses"),
+    queryFn: () => api.get("courses"),
     staleTime: 5 * 60 * 1000, // 5 minutos
   });
 }
@@ -13,7 +13,7 @@ export function useCourses() {
 export function useCourse(courseId: string) {
   return useQuery({
     queryKey: ["course", courseId],
-    queryFn: () => api.get(`/courses/${courseId}`),
+    queryFn: () => api.get(`courses/${courseId}`),
     enabled: !!courseId,
   });
 }

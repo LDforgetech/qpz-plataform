@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useCourses } from "@/hooks/useCourses";
 import {
   Search,
   Bell,
@@ -13,18 +14,16 @@ import {
   ChevronRight,
   Calendar,
   Home,
-  Library,
-  BarChart3,
   AwardIcon,
   BookUser,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import DiagnosticForm from "@/components/diagnostic-form";
 import Logo from "@/components/logo";
 import { UserButton, useUser } from "@clerk/nextjs";
+import Link from "next/link";
+import Image from "next/image";
 
 const inProgress = [
   {
@@ -50,12 +49,12 @@ const inProgress = [
   },
 ];
 
-const recommended = [
-  { title: "Cultura e Clima Organizacional", category: "Cultura", hours: 18 },
-  { title: "Treinamento & Desenvolvimento", category: "T&D", hours: 20 },
-  { title: "Compliance Trabalhista", category: "Jurídico", hours: 12 },
-  { title: "People Analytics na Prática", category: "Dados", hours: 14 },
-];
+type Course = {
+  id: number;
+  title: string;
+  description: string;
+  cover_url: string;
+};
 
 const stats = [
   { label: "Horas estudadas", value: "47h", icon: Clock },
@@ -67,6 +66,9 @@ const Dashboard = () => {
   const { isLoaded, isSignedIn, user } = useUser();
   const [activeNav, setActiveNav] = useState("inicio");
   const [diagnosticOpen, setDiagnosticOpen] = useState(false);
+
+  const { data: rawCourses = [], isLoading } = useCourses();
+  const courses = rawCourses as Course[];
 
   const navItems = [
     { id: "inicio", label: "Início", icon: Home },
@@ -309,31 +311,60 @@ const Dashboard = () => {
               </a>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {recommended.map((course, i) => (
-                <motion.div
-                  key={course.title}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.05 }}
-                  className="group bg-card border border-border rounded-xl p-5 hover:shadow-[var(--shadow-card-hover)] transition-all cursor-pointer"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-primary mb-4 group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
-                    <BookOpen size={18} />
-                  </div>
-                  <span className="text-xs font-semibold uppercase tracking-wider text-accent">
-                    {course.category}
-                  </span>
-                  <h3 className="font-display font-semibold text-foreground mt-1 line-clamp-2">
-                    {course.title}
-                  </h3>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-3">
-                    <Clock size={12} /> {course.hours}h de conteúdo
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="flex justify-center py-10">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary text-primary"></div>
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {courses.map((course, i) => (
+                  <motion.div
+                    key={course.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: i * 0.05 }}
+                    className="group bg-card border border-border rounded-xl overflow-hidden hover:shadow-[var(--shadow-card-hover)] transition-all cursor-pointer flex flex-col"
+                  >
+                    {/* ADICIONADO: className no Link para manter o comportamento do Flexbox */}
+                    <Link
+                      href={`/curso/${course.id}`}
+                      className="flex flex-col flex-1"
+                    >
+                      <div className="w-full h-40 bg-secondary relative overflow-hidden">
+                        {course.cover_url ? (
+                          <Image
+                            width={287}
+                            height={160}
+                            src={course.cover_url}
+                            alt={course.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-primary">
+                            <BookOpen size={32} className="opacity-50" />
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="p-5 flex-1 flex flex-col">
+                        <h3 className="font-display font-semibold text-foreground line-clamp-2 mb-2">
+                          {course.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground line-clamp-3 mb-4 flex-1">
+                          {course.description}
+                        </p>
+
+                        {/* ADICIONADO: padding, rounded e group-hover para background vermelho e texto branco */}
+                        <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground mt-auto p-2 rounded-md w-fit transition-colors duration-300 group-hover:bg-accent group-hover:text-foreground">
+                          <Play size={12} /> Acessar curso
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </section>
 
           {/* Próximo evento */}
