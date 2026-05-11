@@ -17,10 +17,10 @@ export default async function DashboardLayout({
   // TODO: Quando integrar o seu gateway de pagamento (Stripe, Pagar.me, Mercado Pago, etc),
   // você deverá verificar aqui se o usuário possui acesso ativo.
   // Isso pode ser feito lendo o `publicMetadata` do Clerk ou fazendo uma query no seu banco de dados.
-  
+
   // Exemplo de como poderia ser a verificação no futuro:
   // const userHasAccess = sessionClaims?.metadata?.hasPaid === true;
-  
+
   // Por enquanto, como não há pagamento integrado, deixamos como 'true' para liberar o acesso.
   const userHasAccess = true; // <-- Quando tiver a integração, substitua pela sua lógica real.
 

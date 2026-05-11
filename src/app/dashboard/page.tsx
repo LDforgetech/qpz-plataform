@@ -86,7 +86,6 @@ const Dashboard = () => {
         <div className="p-6 border-b border-border">
           <Logo />
         </div>
-
         <nav className="flex-1 p-4 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -107,7 +106,6 @@ const Dashboard = () => {
             );
           })}
         </nav>
-
         {/* Plano ativo */}
         <div className="p-4 border-t border-border">
           <div className="bg-gradient-to-br from-primary to-navy-light rounded-xl p-4 text-primary-foreground">
@@ -326,7 +324,6 @@ const Dashboard = () => {
                     transition={{ duration: 0.4, delay: i * 0.05 }}
                     className="group bg-card border border-border rounded-xl overflow-hidden hover:shadow-[var(--shadow-card-hover)] transition-all cursor-pointer flex flex-col"
                   >
-                    {/* ADICIONADO: className no Link para manter o comportamento do Flexbox */}
                     <Link
                       href={`/curso/${course.id}`}
                       className="flex flex-col flex-1"
