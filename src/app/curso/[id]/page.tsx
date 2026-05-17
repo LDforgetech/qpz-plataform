@@ -328,13 +328,15 @@ const CourseDetail = () => {
                     </p>
                   </div> */}
 
-                  <Button
-                    size="lg"
-                    className="w-full bg-accent text-accent-foreground hover:bg-gold-dark font-semibold shadow-[var(--shadow-gold)]"
-                  >
-                    <Play size={18} fill="currentColor" />
-                    Iniciar curso
-                  </Button>
+                  <Link href={`/curso/${id}/aulas`}>
+                    <Button
+                      size="lg"
+                      className="w-full bg-accent text-accent-foreground hover:bg-gold-dark font-semibold shadow-[var(--shadow-gold)]"
+                    >
+                      <Play size={18} fill="currentColor" />
+                      Iniciar curso
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </motion.div>

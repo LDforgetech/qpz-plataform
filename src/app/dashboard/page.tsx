@@ -24,6 +24,14 @@ import Logo from "@/components/logo";
 import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Separator } from "@/components/ui/separator";
 
 const inProgress = [
   {
@@ -106,7 +114,7 @@ const Dashboard = () => {
             );
           })}
         </nav>
-        {/* Plano ativo */}
+        Plano ativo
         <div className="p-4 border-t border-border">
           <div className="bg-gradient-to-br from-primary to-navy-light rounded-xl p-4 text-primary-foreground">
             <div className="flex items-center gap-2 mb-2">
@@ -153,9 +161,7 @@ const Dashboard = () => {
               >
                 <Bell size={18} />
               </Button>
-              {isLoaded && isSignedIn && (
-                <UserButton afterSignOutUrl="/" showName />
-              )}
+              {isLoaded && isSignedIn && <UserButton showName />}
             </div>
           </div>
         </header>

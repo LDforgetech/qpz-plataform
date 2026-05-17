@@ -5,6 +5,8 @@ export type CourseLesson = {
   title: string;
   duration_seconds: number;
   duration_formatted: string | null;
+  bunny_video_url: string | null;
+  order: number;
 };
 
 export type CourseModule = {
@@ -12,6 +14,7 @@ export type CourseModule = {
   title: string;
   total_duration_seconds: number;
   total_duration_formatted: string;
+  order: number;
   lessons: CourseLesson[];
 };
 
