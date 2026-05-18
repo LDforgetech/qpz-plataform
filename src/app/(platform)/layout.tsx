@@ -1,7 +1,14 @@
+import { AppSidebar } from "@/components/app-sidebar";
+import { AppHeader } from "@/components/app-header";
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-export default async function DashboardLayout({
+export default async function PlatformLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -29,5 +36,17 @@ export default async function DashboardLayout({
     redirect("/#planos");
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <TooltipProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <AppHeader />
+            {children}
+          </SidebarInset>
+        </SidebarProvider>
+      </TooltipProvider>
+    </>
+  );
 }
