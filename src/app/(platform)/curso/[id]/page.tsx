@@ -138,7 +138,6 @@ function ModuleLessonRow({ lesson }: { lesson: CourseLesson }) {
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm text-foreground line-clamp-1">{lesson.title}</p>
-        <p className="text-xs text-muted-foreground">Aula em vídeo</p>
       </div>
       {duration && (
         <span className="text-xs text-muted-foreground shrink-0 flex items-center gap-1">
@@ -294,7 +293,7 @@ const CourseDetail = () => {
                     <iframe
                       src={course.intro_video_url}
                       title={`Vídeo introdutório — ${course.title}`}
-                      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                       className="absolute inset-0 w-full h-full"
                     />

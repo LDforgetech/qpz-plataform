@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useCourses } from "@/hooks/useCourses";
+import { useTrails } from "@/hooks/useTrails";
 import {
   Play,
   Clock,
@@ -11,12 +12,14 @@ import {
   BookOpen,
   ChevronRight,
   Calendar,
+  Layers,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DiagnosticForm from "@/components/diagnostic-form";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 
 type Course = {
   id: number;
@@ -37,6 +40,8 @@ const Dashboard = () => {
 
   const { data: rawCourses = [], isLoading } = useCourses();
   const courses = rawCourses as Course[];
+
+  const { data: trails = [], isLoading: isLoadingTrails } = useTrails();
 
   const planExpiresIn = 247;
 
@@ -112,7 +117,7 @@ const Dashboard = () => {
             );
           })}
         </div>
-        {/* Recomendados */}
+        {/* Cursos */}
         <section className="mb-12">
           <div className="flex items-center justify-between mb-5">
             <div>
@@ -124,7 +129,7 @@ const Dashboard = () => {
               href="#"
               className="text-sm font-semibold text-accent hover:text-gold-dark flex items-center gap-1"
             >
-              Ver biblioteca <ChevronRight size={14} />
+              Ver todos <ChevronRight size={14} />
             </a>
           </div>
 
@@ -182,7 +187,7 @@ const Dashboard = () => {
           )}
         </section>
         {/* Próximo evento */}
-        <section className="bg-card border border-border rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        {/* <section className="bg-card border border-border rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center text-accent shrink-0">
               <Calendar size={20} />
@@ -202,6 +207,84 @@ const Dashboard = () => {
           <Button className="bg-primary text-primary-foreground hover:bg-navy-light shrink-0">
             Reservar vaga
           </Button>
+        </section> */}
+
+        {/* Trilha de cursos */}
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h2 className="text-xl font-display font-bold text-foreground">
+                Trilhas de carreira
+              </h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                Sequências de cursos pensadas para o seu próximo passo
+              </p>
+            </div>
+            <a
+              href="#"
+              className="text-sm font-semibold text-accent hover:text-gold-dark flex items-center gap-1"
+            >
+              Ver todas <ChevronRight size={14} />
+            </a>
+          </div>
+
+          {isLoadingTrails ? (
+            <div className="flex justify-center py-10">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary text-primary"></div>
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {trails.map((trail, i) => (
+                <motion.div
+                  key={trail.slug}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.05 }}
+                >
+                  <Link
+                    href={`/trilha/${trail.slug}`}
+                    className="group bg-card border border-border rounded-xl overflow-hidden hover:shadow-[var(--shadow-card-hover)] transition-all cursor-pointer block h-full flex flex-col"
+                  >
+                    {trail.thumbnail ? (
+                      <div className="w-full h-36 bg-secondary relative overflow-hidden">
+                        <Image
+                          width={400}
+                          height={144}
+                          src={trail.thumbnail}
+                          alt={trail.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-full h-36 bg-secondary flex items-center justify-center">
+                        <Layers size={32} className="text-primary opacity-50" />
+                      </div>
+                    )}
+                    <div className="p-5 flex flex-col flex-1">
+                      <Badge
+                        variant="secondary"
+                        className="self-start text-[10px] mb-2"
+                      >
+                        Trilha
+                      </Badge>
+                      <h3 className="font-display font-semibold text-foreground line-clamp-2">
+                        {trail.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground mt-2 line-clamp-2 flex-1">
+                        {trail.description}
+                      </p>
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground mt-4 pt-4 border-t border-border">
+                        <span className="flex items-center gap-1">
+                          <BookOpen size={12} /> {trail.courses_count} cursos
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </section>
       </main>
 

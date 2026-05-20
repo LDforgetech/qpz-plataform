@@ -147,12 +147,41 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
     onOpenChange(next);
   };
 
-  const onSubmit = (data: any) => {
-    console.log("Respostas do Usuário:", data);
-    setSubmitted(true);
-    toast.success("Formulário concluído!", {
-      description: "Suas respostas foram registradas com sucesso.",
-    });
+  const onSubmit = async (data: any) => {
+    // transforma string -> number
+    const formattedAnswers = Object.entries(data).reduce(
+      (acc, [key, value]) => {
+        acc[key] = Number(value);
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+
+    const payload = {
+      answers: formattedAnswers,
+    };
+
+    console.log("Payload enviado:", payload);
+
+    // try {
+    //   await api.post("/profile", payload);
+
+    //   setSubmitted(true);
+
+    //   toast.success("Formulário concluído!", {
+    //     description: "Suas respostas foram registradas com sucesso.",
+    //   });
+    // } catch (error) {
+    //   console.error(error);
+
+    //   toast.error("Erro ao enviar formulário");
+    // }
+
+    // console.log("Respostas do Usuário:", data);
+    // setSubmitted(true);
+    // toast.success("Formulário concluído!", {
+    //   description: "Suas respostas foram registradas com sucesso.",
+    // });
   };
 
   return (

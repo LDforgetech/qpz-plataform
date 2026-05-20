@@ -4,7 +4,6 @@ import * as React from "react";
 
 import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
-import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -28,17 +27,17 @@ const data = {
     },
     {
       name: "Minha Trilha",
-      url: "#",
+      url: "minha-trilha",
       icon: <SparklesIcon />,
     },
     {
       name: "Certificados",
-      url: "#",
+      url: "certificados",
       icon: <AwardIcon />,
     },
     {
       name: "Contato",
-      url: "#",
+      url: "contato",
       icon: <BookUserIcon />,
     },
   ],
