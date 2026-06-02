@@ -1,7 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import { useSubmitProfile } from "@/hooks/useProfile";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
@@ -58,6 +60,16 @@ export type FormSection = {
 const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const router = useRouter();
+  const submitProfile = useSubmitProfile();
+  const bodyRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bodyRef.current?.scrollTo({
+      top: 0,
+      behavior: "smooth", // pode remover se quiser instantâneo
+    });
+  }, [step]);
 
   // Busca de dados com React Query
   const {
@@ -161,27 +173,20 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
       answers: formattedAnswers,
     };
 
-    console.log("Payload enviado:", payload);
+    try {
+      await submitProfile.mutateAsync(payload);
 
-    // try {
-    //   await api.post("/profile", payload);
+      setSubmitted(true);
 
-    //   setSubmitted(true);
-
-    //   toast.success("Formulário concluído!", {
-    //     description: "Suas respostas foram registradas com sucesso.",
-    //   });
-    // } catch (error) {
-    //   console.error(error);
-
-    //   toast.error("Erro ao enviar formulário");
-    // }
-
-    // console.log("Respostas do Usuário:", data);
-    // setSubmitted(true);
-    // toast.success("Formulário concluído!", {
-    //   description: "Suas respostas foram registradas com sucesso.",
-    // });
+      toast.success("Formulário concluído!", {
+        description: "Suas respostas foram registradas com sucesso.",
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao enviar formulário", {
+        description: "Tente novamente em alguns instantes.",
+      });
+    }
   };
 
   return (
@@ -249,7 +254,7 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
             </div>
 
             {/* Body */}
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 overflow-y-auto p-6" ref={bodyRef}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
@@ -343,16 +348,29 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
               Respostas enviadas!
             </h2>
             <p className="text-muted-foreground mb-8 max-w-md mx-auto text-lg">
-              Recebemos seus dados com sucesso. (Confira o console do
-              navegador).
+              Seu perfil foi traçado com sucesso. Veja agora sua trilha
+              personalizada de cursos.
             </p>
-            <Button
-              size="lg"
-              onClick={() => handleClose(false)}
-              className="bg-primary text-primary-foreground hover:bg-navy-light w-full sm:w-auto"
-            >
-              Fechar
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button
+                size="lg"
+                onClick={() => {
+                  handleClose(false);
+                  router.push("/minha-trilha");
+                }}
+                className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold shadow-[var(--shadow-gold)]"
+              >
+                <Sparkles size={18} />
+                Ver minha trilha
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => handleClose(false)}
+              >
+                Fechar
+              </Button>
+            </div>
           </motion.div>
         )}
       </DialogContent>

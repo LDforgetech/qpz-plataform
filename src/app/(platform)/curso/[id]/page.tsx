@@ -22,6 +22,7 @@ import { useCourse } from "@/hooks/useCourses";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import type { Course, CourseModule, CourseLesson } from "@/types/course";
+import { Progress } from "@/components/ui/progress";
 
 /* ─────────────────────────── helpers ─────────────────────────── */
 
@@ -157,7 +158,7 @@ function ModuleAccordionItem({
   index: number;
 }) {
   const moduleDuration = formatDuration(module.total_duration_seconds);
-  console.log(module.total_duration_seconds);
+  // console.log(module.total_duration_seconds);
   return (
     <AccordionItem
       value={`module-${module.id}`}
@@ -311,21 +312,24 @@ const CourseDetail = () => {
                 )}
 
                 <div className="p-6 space-y-5">
-                  {/* <div>
+                  <div className="mb-4">
                     <div className="flex items-center justify-between text-sm mb-2">
                       <span className="font-semibold text-foreground">
                         Seu progresso
                       </span>
                       <span className="text-accent font-semibold">
-                        {courseData.progress}%
+                        {course.progress.percentage}%
                       </span>
                     </div>
-                    <Progress value={courseData.progress} className="h-2" />
+                    <Progress
+                      value={course.progress.percentage}
+                      className="h-2"
+                    />
                     <p className="text-xs text-muted-foreground mt-2">
-                      {completedLessons} de {courseData.stats.totalLessons}{" "}
-                      aulas concluídas
+                      {course.progress.completed_lessons} de{" "}
+                      {course.progress.percentage} aulas concluídas
                     </p>
-                  </div> */}
+                  </div>
 
                   <Link href={`/curso/${id}/aulas`}>
                     <Button

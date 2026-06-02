@@ -21,16 +21,27 @@ export function useCourse(courseId: string | string[] | undefined) {
 }
 
 // Mutation exemplo: Marcar aula como assistida
-export function useMarkLessonAsWatched() {
+export function useCompleteLesson() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ lessonId }: { lessonId: string }) =>
-      api.post(`/lessons/${lessonId}/watch`, {}),
+    // Agora precisamos do courseId e do lessonId para bater na rota nova
+    mutationFn: ({
+      courseId,
+      lessonId,
+    }: {
+      courseId: string;
+      lessonId: string | number;
+    }) => api.post(`courses/${courseId}/lessons/${lessonId}/complete`, {}),
 
-    onSuccess: (_, { lessonId }) => {
-      queryClient.invalidateQueries({ queryKey: ["course"] });
-      queryClient.invalidateQueries({ queryKey: ["progress"] });
+    onSuccess: (_, variables) => {
+      // A MÁGICA ACONTECE AQUI:
+      // Isso diz pro React Query: "O curso X mudou no banco. Vá buscar os dados novos agora!"
+      // Ele vai rodar o useCourse() invisivelmente e a próxima aula vai voltar com is_unlocked: true
+      queryClient.invalidateQueries({
+        queryKey: ["course", variables.courseId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["courses"] }); // Se quiser atualizar a listagem global tb
     },
   });
 }

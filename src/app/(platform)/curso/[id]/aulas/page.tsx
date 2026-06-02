@@ -1,6 +1,5 @@
 "use client";
-
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -9,13 +8,14 @@ import {
   ChevronRight,
   Play,
   Pause,
-  CheckCircle2,
   Volume2,
   Maximize,
   Minimize,
   Settings,
   List,
   Monitor,
+  CheckCircle2,
+  Lock,
   AlertCircle,
   Loader2,
 } from "lucide-react";
@@ -36,7 +36,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { useCourse } from "@/hooks/useCourses";
+import { useCourse, useCompleteLesson } from "@/hooks/useCourses";
 import type { Course, CourseLesson } from "@/types/course";
 
 /* ─────────────────────────── helpers ─────────────────────────── */
@@ -149,18 +149,38 @@ function PlayerError({
 }
 
 /* ──── Video Player ──── */
-const VideoPlayer = ({ current }: { current: FlatLesson }) => {
+const VideoPlayer = ({
+  current,
+  onVideoEnd,
+}: {
+  current: FlatLesson;
+  onVideoEnd: () => void;
+}) => {
   const [playing, setPlaying] = useState(false);
+
+  // Listener para o evento "ended" do iframe do Bunny.net
+  useEffect(() => {
+    function handleMessage(event: MessageEvent) {
+      if (event.origin !== "https://iframe.mediadelivery.net") return;
+      try {
+        const data =
+          typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+        if (data.event === "ended") {
+          onVideoEnd();
+        }
+      } catch {
+        // Ignora mensagens que não são JSON válido
+      }
+    }
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [onVideoEnd]);
+
   return (
     <div className="bg-black/50 aspect-video w-full relative group rounded-lg overflow-hidden">
-      {/* Aqui assumimos que bunny_video_url virá da API da forma que configuramos anteriormente */}
-      {(current.lesson as any).bunny_video_url ||
-      (current.lesson as any).video_url ? (
+      {current.lesson.bunny_video_url ? (
         <iframe
-          src={
-            (current.lesson as any).bunny_video_url ||
-            (current.lesson as any).video_url
-          }
+          src={current.lesson.bunny_video_url}
           title={current.lesson.title}
           allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
@@ -199,10 +219,8 @@ const VideoPlayer = ({ current }: { current: FlatLesson }) => {
                 <Volume2 size={16} />
                 <span>
                   00:00 /{" "}
-                  {(current.lesson as any).duration_formatted ??
-                    formatDuration(
-                      (current.lesson as any).duration_seconds ?? 0,
-                    )}
+                  {current.lesson.duration_formatted ??
+                    formatDuration(current.lesson.duration_seconds ?? 0)}
                 </span>
               </div>
               <div className="flex items-center gap-3">
@@ -224,18 +242,24 @@ const LessonInfo = ({
   flatIdx,
   flatLessons,
   goTo,
+  onComplete,
+  isCompletePending,
 }: {
   current: FlatLesson;
   moduleIdx: number;
   flatIdx: number;
   flatLessons: FlatLesson[];
   goTo: (mIdx: number, lIdx: number) => void;
+  onComplete: () => void;
+  isCompletePending: boolean;
 }) => {
   const prev = flatIdx > 0 ? flatLessons[flatIdx - 1] : null;
   const next =
     flatIdx >= 0 && flatIdx < flatLessons.length - 1
       ? flatLessons[flatIdx + 1]
       : null;
+
+  const isCompleted = current.lesson.is_completed;
 
   return (
     <div>
@@ -247,8 +271,8 @@ const LessonInfo = ({
           Vídeo
         </Badge>
         <span className="text-xs text-muted-foreground">
-          {(current.lesson as any).duration_formatted ??
-            formatDuration((current.lesson as any).duration_seconds ?? 0)}
+          {current.lesson.duration_formatted ??
+            formatDuration(current.lesson.duration_seconds ?? 0)}
         </span>
       </div>
 
@@ -272,17 +296,35 @@ const LessonInfo = ({
           <span className="sm:hidden">Anterior</span>
         </Button>
 
-        {/* <Button
-          variant="ghost"
-          size="sm"
-          className="text-accent hover:text-gold-dark hidden md:inline-flex"
-        >
-          <CheckCircle2 size={16} />
-          Marcar como concluída
-        </Button> */}
+        {isCompleted ? (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-green-500 hover:text-green-600 hidden md:inline-flex cursor-default"
+            disabled
+          >
+            <CheckCircle2 size={16} />
+            Concluída
+          </Button>
+        ) : (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-accent hover:text-gold-dark hidden md:inline-flex"
+            onClick={onComplete}
+            disabled={isCompletePending}
+          >
+            {isCompletePending ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <CheckCircle2 size={16} />
+            )}
+            Marcar como concluída
+          </Button>
+        )}
 
         <Button
-          disabled={!next}
+          disabled={!next || (!isCompleted && !next.lesson.is_unlocked)}
           onClick={() => next && goTo(next.moduleIdx, next.lessonIdx)}
           className="bg-accent text-accent-foreground hover:bg-gold-dark"
         >
@@ -324,10 +366,6 @@ const SidebarList = ({
     `module-${moduleIdx}`,
   );
 
-  // Progresso (placeholder)
-  const completedLessons = 0;
-  const courseProgress =
-    totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
   return (
     <div className="flex flex-col h-full w-full">
@@ -340,11 +378,14 @@ const SidebarList = ({
         </h3>
         <div className="flex items-center justify-between text-xs mt-3 mb-1.5">
           <span className="text-muted-foreground">
-            {completedLessons}/{totalLessons} aulas
+            {course.progress.completed_lessons}/{course.progress.total_lessons}{" "}
+            aulas
           </span>
-          <span className="font-semibold text-accent">{courseProgress}%</span>
+          <span className="font-semibold text-accent">
+            {course.progress.percentage}%
+          </span>
         </div>
-        <Progress value={courseProgress} className="h-1.5" />
+        <Progress value={course.progress.percentage} className="h-1.5" />
       </div>
 
       <div className="flex-1 overflow-y-auto">
@@ -355,7 +396,7 @@ const SidebarList = ({
           onValueChange={setOpenModule}
         >
           {course.modules.map((mod, mIdx) => {
-            const moduleCompleted = 0; // TODO: integrar com progresso real
+            const moduleCompleted = mod.lessons.filter((l) => l.is_completed).length;
             return (
               <AccordionItem
                 key={mod.id}
@@ -380,36 +421,50 @@ const SidebarList = ({
                   <ul>
                     {mod.lessons.map((lesson, lIdx) => {
                       const isActive = mIdx === moduleIdx && lIdx === lessonIdx;
+                      const isLocked = !lesson.is_unlocked;
                       return (
                         <li key={lesson.id}>
                           <button
                             onClick={() => {
+                              if (isLocked) return;
                               goTo(mIdx, lIdx);
                               onPick?.();
                             }}
+                            disabled={isLocked}
                             className={cn(
                               "w-full flex items-start gap-3 px-4 py-3 text-left transition-colors border-l-2",
                               isActive
                                 ? "bg-accent/10 border-l-accent"
                                 : "border-l-transparent hover:bg-secondary/60",
+                              isLocked && "opacity-50 cursor-not-allowed",
                             )}
                           >
                             <div
                               className={cn(
                                 "w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5",
-                                isActive
-                                  ? "bg-accent text-accent-foreground"
-                                  : "bg-secondary",
+                                lesson.is_completed
+                                  ? "bg-green-500/20 text-green-500"
+                                  : isActive
+                                    ? "bg-accent text-accent-foreground"
+                                    : isLocked
+                                      ? "bg-secondary text-muted-foreground"
+                                      : "bg-secondary",
                               )}
                             >
-                              <Play
-                                size={12}
-                                className={
-                                  isActive
-                                    ? "text-accent-foreground"
-                                    : "text-primary"
-                                }
-                              />
+                              {lesson.is_completed ? (
+                                <CheckCircle2 size={12} />
+                              ) : isLocked ? (
+                                <Lock size={12} />
+                              ) : (
+                                <Play
+                                  size={12}
+                                  className={
+                                    isActive
+                                      ? "text-accent-foreground"
+                                      : "text-primary"
+                                  }
+                                />
+                              )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <p
@@ -418,14 +473,15 @@ const SidebarList = ({
                                   isActive
                                     ? "font-semibold text-foreground"
                                     : "text-foreground/90",
+                                  isLocked && "text-muted-foreground",
                                 )}
                               >
                                 {lesson.title}
                               </p>
                               <p className="text-xs text-muted-foreground mt-0.5">
-                                {(lesson as any).duration_formatted ??
+                                {lesson.duration_formatted ??
                                   formatDuration(
-                                    (lesson as any).duration_seconds ?? 0,
+                                    lesson.duration_seconds ?? 0,
                                   )}
                               </p>
                             </div>
@@ -455,6 +511,7 @@ export default function LessonPlayerPage() {
   const lessonIdx = Number(searchParams.get("aula") ?? 0);
 
   const { data: course, isLoading, isError, error } = useCourse(courseId);
+  const completeMutation = useCompleteLesson();
   const flatLessons = useFlatLessons(course);
 
   const flatIdx = useMemo(() => {
@@ -465,6 +522,24 @@ export default function LessonPlayerPage() {
 
   const current = flatLessons[flatIdx >= 0 ? flatIdx : 0];
   const [theaterMode, setTheaterMode] = useState(false);
+
+  const handleVideoEnd = useCallback(() => {
+    if (!current || current.lesson.is_completed) return;
+    if (!courseId) return;
+    completeMutation.mutate({
+      courseId,
+      lessonId: String(current.lesson.id),
+    });
+  }, [current, courseId, completeMutation]);
+
+  const handleManualComplete = useCallback(() => {
+    if (!current || current.lesson.is_completed) return;
+    if (!courseId) return;
+    completeMutation.mutate({
+      courseId,
+      lessonId: String(current.lesson.id),
+    });
+  }, [current, courseId, completeMutation]);
 
   const goTo = useCallback(
     (mIdx: number, lIdx: number) => {
@@ -543,7 +618,7 @@ export default function LessonPlayerPage() {
     <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-background ml-12">
       {Header}
       <div className="px-4 md:px-8 pt-6 w-full max-w-[1300px] mx-auto">
-        <VideoPlayer current={current} />
+        <VideoPlayer current={current} onVideoEnd={handleVideoEnd} />
       </div>
       <div className="flex-1 flex flex-col lg:flex-row max-w-[1250px] w-full mx-auto">
         <div className="flex-1 px-4 md:px-8 py-6 min-w-0">
@@ -553,6 +628,8 @@ export default function LessonPlayerPage() {
             flatIdx={flatIdx}
             flatLessons={flatLessons}
             goTo={goTo}
+            onComplete={handleManualComplete}
+            isCompletePending={completeMutation.isPending}
           />
         </div>
         <aside className="hidden lg:flex w-[360px] xl:w-[400px] border-l border-border bg-card shrink-0">
@@ -571,7 +648,7 @@ export default function LessonPlayerPage() {
       <div className="flex-1 flex flex-col min-w-0">
         {Header}
         <div className="px-4 md:px-8 pt-6 w-full max-w-4xl mx-auto">
-          <VideoPlayer current={current} />
+          <VideoPlayer current={current} onVideoEnd={handleVideoEnd} />
         </div>
         <div className="flex-1 px-4 md:px-8 py-6 max-w-4xl w-full mx-auto">
           <LessonInfo
@@ -580,6 +657,8 @@ export default function LessonPlayerPage() {
             flatIdx={flatIdx}
             flatLessons={flatLessons}
             goTo={goTo}
+            onComplete={handleManualComplete}
+            isCompletePending={completeMutation.isPending}
           />
         </div>
       </div>

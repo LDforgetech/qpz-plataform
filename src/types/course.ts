@@ -6,6 +6,8 @@ export type CourseLesson = {
   duration_seconds: number;
   duration_formatted: string | null;
   bunny_video_url: string | null;
+  is_unlocked: boolean;
+  is_completed: boolean;
   order: number;
 };
 
@@ -18,11 +20,19 @@ export type CourseModule = {
   lessons: CourseLesson[];
 };
 
+export type CourseProgress = {
+  total_lessons: number;
+  completed_lessons: number;
+  percentage: number;
+  certificate_url: string | null;
+};
+
 export type Course = {
   id: number;
   title: string;
   description: string;
   cover_url: string;
+  progress: CourseProgress;
   intro_video_url: string;
   duration_seconds: number;
   duration_formatted: string;

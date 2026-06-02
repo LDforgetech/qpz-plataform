@@ -26,6 +26,7 @@ async function request<T>(
   config?: RequestInit,
 ): Promise<T> {
   const auth = await authHeaders();
+  console.log(auth);
 
   const response = await fetch(`${BASE_URL}${url}`, {
     ...config,
