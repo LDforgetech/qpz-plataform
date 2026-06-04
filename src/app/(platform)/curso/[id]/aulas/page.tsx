@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState, useCallback, useEffect } from "react";
+import { useMemo, useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -18,6 +18,10 @@ import {
   Lock,
   AlertCircle,
   Loader2,
+  SkipForward,
+  X,
+  ToggleLeft,
+  ToggleRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -147,6 +151,87 @@ function PlayerError({
     </div>
   );
 }
+
+/* ──── Autoplay Countdown Overlay ──── */
+const AUTOPLAY_SECONDS = 5;
+
+const AutoplayCountdown = ({
+  secondsLeft,
+  nextLesson,
+  onCancel,
+  onContinue,
+}: {
+  secondsLeft: number;
+  nextLesson: FlatLesson;
+  onCancel: () => void;
+  onContinue: () => void;
+}) => {
+  const progress = ((AUTOPLAY_SECONDS - secondsLeft) / AUTOPLAY_SECONDS) * 100;
+  const circumference = 2 * Math.PI * 28; // r=28
+  const strokeOffset = circumference - (progress / 100) * circumference;
+
+  return (
+    <div className="absolute inset-0 z-20 bg-black/80 backdrop-blur-sm flex items-center justify-center rounded-lg">
+      <div className="flex flex-col items-center gap-5 text-center px-4">
+        {/* Circular countdown */}
+        <div className="relative w-20 h-20">
+          <svg className="w-20 h-20 -rotate-90" viewBox="0 0 64 64">
+            <circle
+              cx="32" cy="32" r="28"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              className="text-white/10"
+            />
+            <circle
+              cx="32" cy="32" r="28"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              className="text-accent transition-all duration-1000 ease-linear"
+              strokeDasharray={circumference}
+              strokeDashoffset={strokeOffset}
+            />
+          </svg>
+          <span className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white tabular-nums">
+            {secondsLeft}
+          </span>
+        </div>
+
+        <div>
+          <p className="text-sm text-white/60 mb-1">Próxima aula em {secondsLeft}s</p>
+          <p className="text-base font-semibold text-white line-clamp-2 max-w-xs">
+            {nextLesson.lesson.title}
+          </p>
+          <p className="text-xs text-white/40 mt-1">
+            Módulo {nextLesson.moduleIdx + 1} • {nextLesson.moduleTitle}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onCancel}
+            className="border-white/20 text-white hover:bg-white/10 hover:text-white"
+          >
+            <X size={14} />
+            Cancelar
+          </Button>
+          <Button
+            size="sm"
+            onClick={onContinue}
+            className="bg-accent text-accent-foreground hover:bg-gold-dark"
+          >
+            <SkipForward size={14} />
+            Continuar agora
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 /* ──── Video Player ──── */
 const VideoPlayer = ({
@@ -522,15 +607,106 @@ export default function LessonPlayerPage() {
 
   const current = flatLessons[flatIdx >= 0 ? flatIdx : 0];
   const [theaterMode, setTheaterMode] = useState(false);
+  const [autoplay, setAutoplay] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(null);
+  const countdownInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Identifica a próxima aula disponível
+  const nextLesson = useMemo(() => {
+    if (flatIdx < 0 || flatIdx >= flatLessons.length - 1) return null;
+    return flatLessons[flatIdx + 1];
+  }, [flatLessons, flatIdx]);
+
+  const goTo = useCallback(
+    (mIdx: number, lIdx: number) => {
+      router.push(`/curso/${courseId}/aulas?modulo=${mIdx}&aula=${lIdx}`);
+    },
+    [router, courseId],
+  );
+
+  // Navegar para a próxima aula e limpar countdown
+  const goToNext = useCallback(() => {
+    if (countdownInterval.current) {
+      clearInterval(countdownInterval.current);
+      countdownInterval.current = null;
+    }
+    setCountdown(null);
+    if (nextLesson) {
+      goTo(nextLesson.moduleIdx, nextLesson.lessonIdx);
+    }
+  }, [nextLesson, goTo]);
+
+  // Cancelar countdown
+  const cancelCountdown = useCallback(() => {
+    if (countdownInterval.current) {
+      clearInterval(countdownInterval.current);
+      countdownInterval.current = null;
+    }
+    setCountdown(null);
+  }, []);
+
+  // Inicia o countdown de autoplay
+  const startCountdown = useCallback(() => {
+    if (!nextLesson) return;
+    setCountdown(AUTOPLAY_SECONDS);
+    countdownInterval.current = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev === null || prev <= 1) {
+          if (countdownInterval.current) {
+            clearInterval(countdownInterval.current);
+            countdownInterval.current = null;
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, [nextLesson]);
+
+  // Quando countdown chega a 0, navega
+  useEffect(() => {
+    if (countdown === 0) {
+      goToNext();
+    }
+  }, [countdown, goToNext]);
+
+  // Limpa interval ao desmontar
+  useEffect(() => {
+    return () => {
+      if (countdownInterval.current) {
+        clearInterval(countdownInterval.current);
+      }
+    };
+  }, []);
+
+  // Limpa countdown ao mudar de aula
+  useEffect(() => {
+    cancelCountdown();
+  }, [moduleIdx, lessonIdx, cancelCountdown]);
 
   const handleVideoEnd = useCallback(() => {
-    if (!current || current.lesson.is_completed) return;
-    if (!courseId) return;
-    completeMutation.mutate({
-      courseId,
-      lessonId: String(current.lesson.id),
-    });
-  }, [current, courseId, completeMutation]);
+    if (!current || !courseId) return;
+    if (current.lesson.is_completed) {
+      // Já completada, só inicia autoplay se ativo
+      if (autoplay && nextLesson) {
+        startCountdown();
+      }
+      return;
+    }
+    completeMutation.mutate(
+      {
+        courseId,
+        lessonId: String(current.lesson.id),
+      },
+      {
+        onSuccess: () => {
+          if (autoplay && nextLesson) {
+            startCountdown();
+          }
+        },
+      },
+    );
+  }, [current, courseId, completeMutation, autoplay, nextLesson, startCountdown]);
 
   const handleManualComplete = useCallback(() => {
     if (!current || current.lesson.is_completed) return;
@@ -540,13 +716,6 @@ export default function LessonPlayerPage() {
       lessonId: String(current.lesson.id),
     });
   }, [current, courseId, completeMutation]);
-
-  const goTo = useCallback(
-    (mIdx: number, lIdx: number) => {
-      router.push(`/curso/${courseId}/aulas?modulo=${mIdx}&aula=${lIdx}`);
-    },
-    [router, courseId],
-  );
 
   if (isLoading) return <PlayerSkeleton />;
 
@@ -599,6 +768,22 @@ export default function LessonPlayerPage() {
         </SheetContent>
       </Sheet>
       <Button
+        variant={autoplay ? "default" : "outline"}
+        size="sm"
+        className={cn(
+          autoplay
+            ? "bg-accent text-accent-foreground hover:bg-gold-dark"
+            : "",
+        )}
+        onClick={() => setAutoplay((v) => !v)}
+        title={autoplay ? "Desativar autoplay" : "Ativar autoplay"}
+      >
+        {autoplay ? <ToggleRight size={16} /> : <ToggleLeft size={16} />}
+        <span className="hidden sm:inline">
+          {autoplay ? "Autoplay ligado" : "Autoplay"}
+        </span>
+      </Button>
+      <Button
         variant={theaterMode ? "default" : "outline"}
         size="sm"
         className={cn(
@@ -617,8 +802,16 @@ export default function LessonPlayerPage() {
   return theaterMode ? (
     <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-background ml-12">
       {Header}
-      <div className="px-4 md:px-8 pt-6 w-full max-w-[1300px] mx-auto">
+      <div className="px-4 md:px-8 pt-6 w-full max-w-[1300px] mx-auto relative">
         <VideoPlayer current={current} onVideoEnd={handleVideoEnd} />
+        {countdown !== null && nextLesson && (
+          <AutoplayCountdown
+            secondsLeft={countdown}
+            nextLesson={nextLesson}
+            onCancel={cancelCountdown}
+            onContinue={goToNext}
+          />
+        )}
       </div>
       <div className="flex-1 flex flex-col lg:flex-row max-w-[1250px] w-full mx-auto">
         <div className="flex-1 px-4 md:px-8 py-6 min-w-0">
@@ -647,8 +840,16 @@ export default function LessonPlayerPage() {
     <div className="flex flex-col lg:flex-row min-h-[calc(100vh-4rem)] bg-background ml-12">
       <div className="flex-1 flex flex-col min-w-0">
         {Header}
-        <div className="px-4 md:px-8 pt-6 w-full max-w-4xl mx-auto">
+        <div className="px-4 md:px-8 pt-6 w-full max-w-4xl mx-auto relative">
           <VideoPlayer current={current} onVideoEnd={handleVideoEnd} />
+          {countdown !== null && nextLesson && (
+            <AutoplayCountdown
+              secondsLeft={countdown}
+              nextLesson={nextLesson}
+              onCancel={cancelCountdown}
+              onContinue={goToNext}
+            />
+          )}
         </div>
         <div className="flex-1 px-4 md:px-8 py-6 max-w-4xl w-full mx-auto">
           <LessonInfo
