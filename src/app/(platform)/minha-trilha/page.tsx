@@ -7,7 +7,6 @@ import {
   Target,
   TrendingUp,
   ArrowRight,
-  AlertCircle,
   BookOpen,
   RefreshCw,
   Loader2,

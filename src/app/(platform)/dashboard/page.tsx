@@ -20,6 +20,7 @@ import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import { useProfile } from "@/hooks/useProfile";
 
 type Course = {
   id: number;
@@ -37,6 +38,7 @@ const stats = [
 const Dashboard = () => {
   const { user } = useUser();
   const [diagnosticOpen, setDiagnosticOpen] = useState(false);
+  const { data: profileData } = useProfile();
 
   const { data: rawCourses = [], isLoading } = useCourses();
   const courses = rawCourses as Course[];
@@ -57,41 +59,45 @@ const Dashboard = () => {
           className="mb-8"
         >
           <h1 className="text-3xl font-display font-bold text-foreground">
-            Bom te ver de volta, {user?.firstName} 👋
+            {profileData ? "Bom te ver de volta," : "Seja Bem-vindo,"}{" "}
+            {user?.firstName} 👋
           </h1>
           <p className="text-muted-foreground mt-1">
             Continue de onde parou e mantenha sua sequência de estudos.
           </p>
         </motion.div>
         {/* Trilha personalizada CTA */}
-        <motion.section
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-12 bg-gradient-to-br from-primary to-navy-dark rounded-2xl p-8 text-primary-foreground relative overflow-hidden"
-        >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl -mr-20 -mt-20" />
-          <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="flex-1">
-              <h2 className="text-2xl md:text-3xl font-display font-bold mb-2">
-                Trace seu perfil profissional
-              </h2>
-              <p className="opacity-80 max-w-xl">
-                Responda um diagnóstico rápido e receba uma trilha de estudos
-                personalizada com base no seu momento de carreira.
-              </p>
+        {!profileData && (
+          <motion.section
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mb-12 bg-gradient-to-br from-primary to-navy-dark rounded-2xl p-8 text-primary-foreground relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl -mr-20 -mt-20" />
+            <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="flex-1">
+                <h2 className="text-2xl md:text-3xl font-display font-bold mb-2">
+                  Trace seu perfil profissional
+                </h2>
+                <p className="opacity-80 max-w-xl">
+                  Responda um diagnóstico rápido e receba uma trilha de estudos
+                  personalizada com base no seu momento de carreira.
+                </p>
+              </div>
+              <Button
+                size="lg"
+                onClick={() => setDiagnosticOpen(true)}
+                className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold shadow-[var(--shadow-gold)]"
+              >
+                <Sparkles size={18} />
+                Iniciar diagnóstico
+              </Button>
             </div>
-            <Button
-              size="lg"
-              onClick={() => setDiagnosticOpen(true)}
-              className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold shadow-[var(--shadow-gold)]"
-            >
-              <Sparkles size={18} />
-              Iniciar diagnóstico
-            </Button>
-          </div>
-        </motion.section>
+          </motion.section>
+        )}
+
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
           {stats.map((stat, i) => {

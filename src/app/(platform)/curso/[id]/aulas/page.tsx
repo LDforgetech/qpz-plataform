@@ -43,7 +43,6 @@ import { cn } from "@/lib/utils";
 import { useCourse, useCompleteLesson } from "@/hooks/useCourses";
 import type { Course, CourseLesson } from "@/types/course";
 
-/* ─────────────────────────── helpers ─────────────────────────── */
 function formatDuration(seconds: number): string {
   if (!seconds || seconds <= 0) return "—";
   const h = Math.floor(seconds / 3600);
@@ -177,14 +176,18 @@ const AutoplayCountdown = ({
         <div className="relative w-20 h-20">
           <svg className="w-20 h-20 -rotate-90" viewBox="0 0 64 64">
             <circle
-              cx="32" cy="32" r="28"
+              cx="32"
+              cy="32"
+              r="28"
               fill="none"
               stroke="currentColor"
               strokeWidth="3"
               className="text-white/10"
             />
             <circle
-              cx="32" cy="32" r="28"
+              cx="32"
+              cy="32"
+              r="28"
               fill="none"
               stroke="currentColor"
               strokeWidth="3"
@@ -200,7 +203,9 @@ const AutoplayCountdown = ({
         </div>
 
         <div>
-          <p className="text-sm text-white/60 mb-1">Próxima aula em {secondsLeft}s</p>
+          <p className="text-sm text-white/60 mb-1">
+            Próxima aula em {secondsLeft}s
+          </p>
           <p className="text-base font-semibold text-white line-clamp-2 max-w-xs">
             {nextLesson.lesson.title}
           </p>
@@ -214,7 +219,7 @@ const AutoplayCountdown = ({
             variant="outline"
             size="sm"
             onClick={onCancel}
-            className="border-white/20 text-white hover:bg-white/10 hover:text-white"
+            className="border-white/20 text-black hover:bg-white/40 hover:text-white "
           >
             <X size={14} />
             Cancelar
@@ -242,14 +247,36 @@ const VideoPlayer = ({
   onVideoEnd: () => void;
 }) => {
   const [playing, setPlaying] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // Listener para o evento "ended" do iframe do Bunny.net
+  // Protocolo Player.js do Bunny.net:
+  // 1. O iframe envia { event: "ready" } quando carrega
+  // 2. Nós respondemos com { method: "addEventListener", value: "ended" } para nos inscrever
+  // 3. O iframe então envia { event: "ended" } quando o vídeo termina
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
-      if (event.origin !== "https://iframe.mediadelivery.net") return;
+      if (!event.origin.endsWith(".mediadelivery.net")) return;
       try {
         const data =
           typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+
+        // Quando o player fica pronto, inscreve-se no evento "ended"
+        if (data.event === "ready") {
+          const iframe = iframeRef.current;
+          if (iframe?.contentWindow) {
+            iframe.contentWindow.postMessage(
+              JSON.stringify({
+                context: "player.js",
+                version: "0.0.11",
+                method: "addEventListener",
+                value: "ended",
+              }),
+              event.origin,
+            );
+          }
+        }
+
+        // Quando o vídeo termina
         if (data.event === "ended") {
           onVideoEnd();
         }
@@ -265,7 +292,16 @@ const VideoPlayer = ({
     <div className="bg-black/50 aspect-video w-full relative group rounded-lg overflow-hidden">
       {current.lesson.bunny_video_url ? (
         <iframe
-          src={current.lesson.bunny_video_url}
+          ref={iframeRef}
+          src={(() => {
+            try {
+              const url = new URL(current.lesson.bunny_video_url);
+              url.searchParams.set("responsive", "true");
+              return url.toString();
+            } catch {
+              return current.lesson.bunny_video_url;
+            }
+          })()}
           title={current.lesson.title}
           allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
@@ -451,7 +487,6 @@ const SidebarList = ({
     `module-${moduleIdx}`,
   );
 
-
   return (
     <div className="flex flex-col h-full w-full">
       <div className="px-5 py-4 border-b border-border shrink-0">
@@ -481,7 +516,9 @@ const SidebarList = ({
           onValueChange={setOpenModule}
         >
           {course.modules.map((mod, mIdx) => {
-            const moduleCompleted = mod.lessons.filter((l) => l.is_completed).length;
+            const moduleCompleted = mod.lessons.filter(
+              (l) => l.is_completed,
+            ).length;
             return (
               <AccordionItem
                 key={mod.id}
@@ -565,9 +602,7 @@ const SidebarList = ({
                               </p>
                               <p className="text-xs text-muted-foreground mt-0.5">
                                 {lesson.duration_formatted ??
-                                  formatDuration(
-                                    lesson.duration_seconds ?? 0,
-                                  )}
+                                  formatDuration(lesson.duration_seconds ?? 0)}
                               </p>
                             </div>
                           </button>
@@ -706,7 +741,14 @@ export default function LessonPlayerPage() {
         },
       },
     );
-  }, [current, courseId, completeMutation, autoplay, nextLesson, startCountdown]);
+  }, [
+    current,
+    courseId,
+    completeMutation,
+    autoplay,
+    nextLesson,
+    startCountdown,
+  ]);
 
   const handleManualComplete = useCallback(() => {
     if (!current || current.lesson.is_completed) return;
@@ -771,9 +813,7 @@ export default function LessonPlayerPage() {
         variant={autoplay ? "default" : "outline"}
         size="sm"
         className={cn(
-          autoplay
-            ? "bg-accent text-accent-foreground hover:bg-gold-dark"
-            : "",
+          autoplay ? "bg-accent text-accent-foreground hover:bg-gold-dark" : "",
         )}
         onClick={() => setAutoplay((v) => !v)}
         title={autoplay ? "Desativar autoplay" : "Ativar autoplay"}

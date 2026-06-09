@@ -23,6 +23,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import type { Course, CourseModule, CourseLesson } from "@/types/course";
 import { Progress } from "@/components/ui/progress";
+import { useProfile } from "@/hooks/useProfile";
 
 /* ─────────────────────────── helpers ─────────────────────────── */
 
@@ -199,6 +200,7 @@ const CourseDetail = () => {
   const { data: course, isLoading, isError, error } = useCourse(id);
   const { totalModules, totalLessons, totalDuration } = useCourseStats(course);
   const [openModule, setOpenModule] = useState<string | undefined>(undefined);
+  const { data: profileData } = useProfile();
 
   // Loading state com skeleton
   if (isLoading) return <CourseSkeleton />;
@@ -438,24 +440,26 @@ const CourseDetail = () => {
           </div>
 
           {/* CTA trilha */}
-          <div className="bg-gradient-to-br from-primary to-navy-dark text-primary-foreground rounded-xl p-6">
-            <Sparkles size={20} className="text-accent mb-3" />
-            <h3 className="font-display font-semibold mb-2">
-              Não sabe por onde começar?
-            </h3>
-            <p className="text-sm opacity-80 mb-4">
-              Faça o diagnóstico e receba uma trilha personalizada com cursos
-              como este.
-            </p>
-            <Link href="/dashboard">
-              <Button
-                size="sm"
-                className="w-full bg-accent text-accent-foreground hover:bg-gold-dark font-semibold"
-              >
-                Iniciar diagnóstico
-              </Button>
-            </Link>
-          </div>
+          {!profileData && (
+            <div className="bg-gradient-to-br from-primary to-navy-dark text-primary-foreground rounded-xl p-6">
+              <Sparkles size={20} className="text-accent mb-3" />
+              <h3 className="font-display font-semibold mb-2">
+                Não sabe por onde começar?
+              </h3>
+              <p className="text-sm opacity-80 mb-4">
+                Faça o diagnóstico e receba uma trilha personalizada com cursos
+                como este.
+              </p>
+              <Link href="/minha-trilha">
+                <Button
+                  size="sm"
+                  className="w-full bg-accent text-accent-foreground hover:bg-gold-dark font-semibold"
+                >
+                  Iniciar diagnóstico
+                </Button>
+              </Link>
+            </div>
+          )}
         </aside>
       </div>
     </div>
