@@ -22,17 +22,17 @@ const data = {
   projects: [
     {
       name: "Início",
-      url: "dashboard",
+      url: "./dashboard",
       icon: <HomeIcon />,
     },
     {
       name: "Minha Trilha",
-      url: "minha-trilha",
+      url: "./minha-trilha",
       icon: <SparklesIcon />,
     },
     {
       name: "Certificados",
-      url: "certificados",
+      url: "./certificados",
       icon: <AwardIcon />,
     },
     {

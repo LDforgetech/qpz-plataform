@@ -6,7 +6,7 @@ export function useCourses() {
   return useQuery<Course[]>({
     queryKey: ["courses"],
     queryFn: () => api.get<Course[]>("courses"),
-    staleTime: 5 * 60 * 1000, // 5 minutos
+    staleTime: 10 * 60 * 1000, // 10 minutos
   });
 }
 

@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/logo";
 import { SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/nextjs";
+import Link from "next/link";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -14,6 +15,9 @@ const Navbar = () => {
     { label: "Cursos", href: "#cursos" },
     { label: "Planos", href: "#planos" },
   ];
+
+  // Defina a rota para onde o usuário deve ir após logar/cadastrar
+  const redirectUrl = "./dashboard";
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
@@ -33,7 +37,8 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-3">
           {isLoaded && !isSignedIn && (
             <>
-              <SignInButton mode="modal">
+              {/* Adicionado forceRedirectUrl */}
+              <SignInButton mode="modal" forceRedirectUrl={redirectUrl}>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -42,7 +47,9 @@ const Navbar = () => {
                   Entrar
                 </Button>
               </SignInButton>
-              <SignUpButton mode="modal">
+
+              {/* Adicionado forceRedirectUrl */}
+              <SignUpButton mode="modal" forceRedirectUrl={redirectUrl}>
                 <Button
                   size="sm"
                   className="bg-accent text-accent-foreground hover:bg-accent/70 font-semibold shadow-sm"
@@ -53,7 +60,14 @@ const Navbar = () => {
             </>
           )}
           {isLoaded && isSignedIn && (
-            <UserButton afterSignOutUrl="/" showName />
+            <div className="flex items-center justify-center gap-2">
+              <Link href="./dashboard">
+                <Button className="bg-accent text-accent-foreground hover:bg-gold-dar h-8">
+                  Dashboard
+                </Button>
+              </Link>
+              <UserButton afterSignOutUrl="/" showName />
+            </div>
           )}
         </div>
 
@@ -80,7 +94,8 @@ const Navbar = () => {
           <div className="flex gap-2 pt-2">
             {isLoaded && !isSignedIn && (
               <>
-                <SignInButton mode="modal">
+                {/* Adicionado forceRedirectUrl no Mobile */}
+                <SignInButton mode="modal" forceRedirectUrl={redirectUrl}>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -89,7 +104,9 @@ const Navbar = () => {
                     Entrar
                   </Button>
                 </SignInButton>
-                <SignUpButton mode="modal">
+
+                {/* Adicionado forceRedirectUrl no Mobile */}
+                <SignUpButton mode="modal" forceRedirectUrl={redirectUrl}>
                   <Button
                     size="sm"
                     className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold w-full"
