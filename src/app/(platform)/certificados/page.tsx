@@ -171,17 +171,17 @@ const Certificates = () => {
                   <div className="flex items-center gap-2 shrink-0">
                     {cert.certificate?.pdf_url && (
                       <>
-                        <Button size="sm" variant="outline" className="">
-                          <Link
-                            href={cert.certificate.pdf_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="gap-2 flex items-center"
-                          >
+                        <Link
+                          href={cert.certificate.pdf_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="gap-2 flex items-center"
+                        >
+                          <Button size="sm" variant="outline">
                             <Eye size={14} />
                             Visualizar
-                          </Link>
-                        </Button>
+                          </Button>
+                        </Link>
                       </>
                     )}
                     {(() => {

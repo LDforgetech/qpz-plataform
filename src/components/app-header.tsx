@@ -1,10 +1,10 @@
 "use client";
 
-import { Search, Bell } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { UserButton, useUser } from "@clerk/nextjs";
+import SearchBar from "@/components/search-bar";
 
 export function AppHeader() {
   const { isLoaded, isSignedIn } = useUser();
@@ -15,17 +15,7 @@ export function AppHeader() {
         {/* Left: sidebar toggle + search */}
         <div className="flex items-center gap-3 flex-1">
           <SidebarTrigger className="text-muted-foreground" />
-
-          <div className="relative flex-1 max-w-md">
-            <Search
-              size={18}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-            />
-            <Input
-              placeholder="Buscar cursos e/ou trilhas"
-              className="pl-10 bg-secondary border-0"
-            />
-          </div>
+          <SearchBar />
         </div>
 
         {/* Right: notifications + user */}

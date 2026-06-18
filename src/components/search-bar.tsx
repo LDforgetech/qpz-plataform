@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 import { Search, Sparkles, BookOpen, ArrowRight, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/api"; // O seu cliente HTTP configurado
+import { useSearchAutocomplete } from "@/hooks/useSearch";
+import type { SearchTrailResult, SearchCourseResult } from "@/types/search";
 
-// 1. Hook de Debounce: Atrasa a busca até o usuário parar de digitar
+// ── Hook de Debounce ────────────────────────────────────────────────
 function useDebounce<T>(value: T, delay: number = 300): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
   useEffect(() => {
@@ -19,6 +19,11 @@ function useDebounce<T>(value: T, delay: number = 300): T {
   return debouncedValue;
 }
 
+// ── Flat item type para navegação por teclado ───────────────────────
+type FlatItem =
+  | { kind: "trail"; href: string; item: SearchTrailResult }
+  | { kind: "course"; href: string; item: SearchCourseResult };
+
 const SearchBar = () => {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -26,51 +31,37 @@ const SearchBar = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  // O valor debounced que será enviado para a API
   const debouncedQuery = useDebounce(query, 300);
 
-  // 2. A requisição mágica com React Query
-  const { data: results, isFetching } = useQuery({
-    queryKey: ["search", debouncedQuery],
-    queryFn: async () => {
-      // Se tiver menos de 2 letras, nem bate na API
-      if (!debouncedQuery || debouncedQuery.length < 2) {
-        return { trails: [], courses: [], total: 0 };
-      }
-      const response = await api.get(
-        `/search?q=${encodeURIComponent(debouncedQuery)}`,
-      );
-      // Se você usa Axios, geralmente é response.data. Se for fetch nativo customizado, pode ser só response.
-      return response.data || response;
-    },
-    // Só faz a query se a gaveta estiver aberta e tiver texto
-    enabled: open && debouncedQuery.length >= 2,
-    staleTime: 1000 * 60 * 5, // Faz cache dos resultados por 5 minutos
-  });
+  const { data: results, isFetching } = useSearchAutocomplete(
+    debouncedQuery,
+    open,
+  );
 
-  // Dados com fallback seguro
-  const safeResults = results || { trails: [], courses: [], total: 0 };
+  const safeResults = results ?? { trails: [], courses: [], total: 0 };
 
-  const flatItems = useMemo(
+  const flatItems = useMemo<FlatItem[]>(
     () => [
-      ...safeResults.trails.map((t: any) => ({
+      ...safeResults.trails.map((t) => ({
         kind: "trail" as const,
-        href: `/trilha/${t.slug}`,
+        href: `/trilha/${t.id}`,
         item: t,
       })),
-      ...safeResults.courses.map((c: any) => ({
+      ...safeResults.courses.map((c) => ({
         kind: "course" as const,
-        href: `/curso/${c.slug}`,
+        href: `/curso/${c.id}`,
         item: c,
       })),
     ],
-    [safeResults],
+    [safeResults.trails, safeResults.courses],
   );
 
+  // Reset index quando a query muda
   useEffect(() => {
     setActiveIdx(-1);
   }, [query]);
 
+  // Fechar dropdown ao clicar fora
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (!wrapperRef.current?.contains(e.target as Node)) setOpen(false);
@@ -130,7 +121,7 @@ const SearchBar = () => {
 
       {showDropdown && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-popover border border-border rounded-xl shadow-lg overflow-hidden z-50 animate-in fade-in-0 zoom-in-95">
-          {/* Mostra um Loading enquanto o React Query busca os dados */}
+          {/* Loading */}
           {isFetching && debouncedQuery.length >= 2 ? (
             <div className="px-4 py-6 flex items-center justify-center text-muted-foreground gap-2">
               <Loader2 size={16} className="animate-spin" />
@@ -138,36 +129,36 @@ const SearchBar = () => {
             </div>
           ) : (
             <>
-              {/* Quando termina de buscar, mas não acha nada */}
+              {/* Sem resultados */}
               {!hasResults && debouncedQuery.length >= 2 && (
                 <div className="px-4 py-6 text-center text-sm text-muted-foreground">
                   Nenhum resultado para{" "}
                   <span className="font-semibold text-foreground">
-                    "{debouncedQuery}"
+                    &ldquo;{debouncedQuery}&rdquo;
                   </span>
                 </div>
               )}
 
-              {/* Pede pro usuário digitar mais */}
+              {/* Mínimo de caracteres */}
               {debouncedQuery.length > 0 && debouncedQuery.length < 2 && (
                 <div className="px-4 py-6 text-center text-sm text-muted-foreground">
                   Digite pelo menos 2 caracteres para buscar...
                 </div>
               )}
 
-              {/* Renderiza Trilhas */}
+              {/* Trilhas */}
               {safeResults.trails.length > 0 && (
                 <div className="py-2">
                   <div className="px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                     Trilhas
                   </div>
-                  {safeResults.trails.map((t: any) => {
+                  {safeResults.trails.map((t) => {
                     runningIdx++;
                     const idx = runningIdx;
                     return (
                       <Link
-                        key={t.slug}
-                        href={`/trilha/${t.slug}`}
+                        key={t.id}
+                        href={`/trilha/${t.id}`}
                         onClick={() => setOpen(false)}
                         className={cn(
                           "flex items-start gap-3 px-4 py-2.5 hover:bg-secondary transition-colors",
@@ -191,19 +182,19 @@ const SearchBar = () => {
                 </div>
               )}
 
-              {/* Renderiza Cursos */}
+              {/* Cursos */}
               {safeResults.courses.length > 0 && (
                 <div className="py-2 border-t border-border">
                   <div className="px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                     Cursos
                   </div>
-                  {safeResults.courses.map((c: any) => {
+                  {safeResults.courses.map((c) => {
                     runningIdx++;
                     const idx = runningIdx;
                     return (
                       <Link
-                        key={c.slug}
-                        href={`/curso/${c.slug}`}
+                        key={c.id}
+                        href={`/curso/${c.id}`}
                         onClick={() => setOpen(false)}
                         className={cn(
                           "flex items-start gap-3 px-4 py-2.5 hover:bg-secondary transition-colors",
@@ -227,7 +218,7 @@ const SearchBar = () => {
                 </div>
               )}
 
-              {/* Botão Ver Todos */}
+              {/* Ver todos */}
               {safeResults.total > flatItems.length && (
                 <button
                   type="button"
@@ -235,8 +226,8 @@ const SearchBar = () => {
                   className="w-full flex items-center justify-between px-4 py-3 border-t border-border bg-secondary/40 hover:bg-secondary transition-colors text-sm font-semibold text-primary"
                 >
                   <span>
-                    Ver todos os {safeResults.total} resultados para "
-                    {debouncedQuery}"
+                    Ver todos os {safeResults.total} resultados para &ldquo;
+                    {debouncedQuery}&rdquo;
                   </span>
                   <ArrowRight size={14} />
                 </button>
