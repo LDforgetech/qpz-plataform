@@ -159,7 +159,6 @@ function ModuleAccordionItem({
   index: number;
 }) {
   const moduleDuration = formatDuration(module.total_duration_seconds);
-  // console.log(module.total_duration_seconds);
   return (
     <AccordionItem
       value={`module-${module.id}`}

@@ -16,7 +16,6 @@ export function registerGetToken(fn: GetTokenFn) {
 async function authHeaders(): Promise<Record<string, string>> {
   if (!_getToken) return {};
   const token = await _getToken();
-  console.log(token);
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
@@ -26,7 +25,6 @@ async function request<T>(
   config?: RequestInit,
 ): Promise<T> {
   const auth = await authHeaders();
-  console.log(auth);
 
   const response = await fetch(`${BASE_URL}${url}`, {
     ...config,

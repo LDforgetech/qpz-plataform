@@ -84,7 +84,8 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
   });
 
   // Zod Schema dinâmico
-  const [schema, setSchema] = useState<z.ZodObject<any, any>>(z.object({}));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [schema, setSchema] = useState<any>(z.object({}));
 
   const {
     control,
@@ -108,7 +109,7 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
           const fieldName = `question_${q.id}`;
           schemaShape[fieldName] = z
             .string({
-              required_error: "Por favor, selecione uma opção.",
+              error: "Por favor, selecione uma opção.",
             })
             .min(1, "Por favor, selecione uma opção.");
           defaultValues[fieldName] = "";

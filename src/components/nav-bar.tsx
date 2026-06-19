@@ -66,7 +66,7 @@ const Navbar = () => {
                   Dashboard
                 </Button>
               </Link>
-              <UserButton afterSignOutUrl="/" showName />
+              <UserButton showName />
             </div>
           )}
         </div>
@@ -118,7 +118,7 @@ const Navbar = () => {
             )}
             {isLoaded && isSignedIn && (
               <div className="flex items-center justify-center w-full py-2">
-                <UserButton afterSignOutUrl="/" />
+                <UserButton />
               </div>
             )}
           </div>

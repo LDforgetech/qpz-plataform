@@ -63,8 +63,6 @@ const MyTrail = () => {
   const [diagnosticOpen, setDiagnosticOpen] = useState(false);
   const { data: profileData, isLoading, refetch } = useProfile();
 
-  console.log(profileData);
-
   // ====== Loading ======
   if (isLoading) {
     return (
