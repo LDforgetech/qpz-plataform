@@ -293,7 +293,16 @@ const CourseDetail = () => {
                 {course.intro_video_url ? (
                   <div className="relative w-full aspect-video overflow-hidden rounded-t-2xl bg-black">
                     <iframe
-                      src={course.intro_video_url}
+                      src={(() => {
+                        try {
+                          const url = new URL(course.intro_video_url);
+                          url.searchParams.set("responsive", "true");
+                          url.searchParams.set("loop", "false");
+                          return url.toString();
+                        } catch {
+                          return course.intro_video_url;
+                        }
+                      })()}
                       title={`Vídeo introdutório — ${course.title}`}
                       allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen

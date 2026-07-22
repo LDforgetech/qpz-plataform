@@ -7,32 +7,48 @@ import {
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { serverFetch } from "@/lib/api";
+import type { SubscriptionStatusResponse } from "@/types/subscription";
 
 export default async function PlatformLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { userId } = await auth();
+  const { userId, getToken } = await auth();
 
   // 1. Proteção de Autenticação (Garantia adicional ao middleware)
   if (!userId) {
     redirect("/");
   }
 
-  // 2. GATILHO PARA INTEGRAÇÃO DE PAGAMENTO
-  // TODO: Quando integrar o seu gateway de pagamento (Stripe, Pagar.me, Mercado Pago, etc),
-  // você deverá verificar aqui se o usuário possui acesso ativo.
-  // Isso pode ser feito lendo o `publicMetadata` do Clerk ou fazendo uma query no seu banco de dados.
+  // 2. Blindagem de Assinatura — verificação server-side em tempo real
+  // Consulta a API do backend para checar se o usuário tem assinatura ativa.
+  // cache: 'no-store' garante leitura em tempo real a cada request.
+  let isActive = false;
 
-  // Exemplo de como poderia ser a verificação no futuro:
-  // const userHasAccess = sessionClaims?.metadata?.hasPaid === true;
+  try {
+    const token = await getToken();
 
-  // Por enquanto, como não há pagamento integrado, deixamos como 'true' para liberar o acesso.
-  const userHasAccess = true; // <-- Quando tiver a integração, substitua pela sua lógica real.
+    if (!token) {
+      redirect("/#planos");
+    }
 
-  if (!userHasAccess) {
-    // Se não comprou, redireciona para a página de vendas ou planos.
+    const status = await serverFetch<SubscriptionStatusResponse>(
+      "student/status",
+      token,
+      { cache: "no-store" },
+    );
+
+    isActive = status.is_active;
+  } catch {
+    // Erro de rede ou API — redireciona por segurança.
+    // Isso garante que usuários sem assinatura ou com instabilidade
+    // de rede não acessem conteúdo premium indevidamente.
+    isActive = false;
+  }
+
+  if (!isActive) {
     redirect("/#planos");
   }
 

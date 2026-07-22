@@ -185,15 +185,12 @@ const PersonalizedPath = () => {
                     </p>
                   </div> */}
 
-                  <Button
-                    // asChild
-                    className="w-full bg-accent text-accent-foreground hover:bg-gold-dark font-semibold"
-                  >
-                    <a href="#planos" className="flex items-center gap-2">
+                  <a href="\#planos" className="flex items-center gap-2">
+                    <Button className="w-full bg-accent text-accent-foreground hover:bg-gold-dark font-semibold">
                       Ver planos e desbloquear
                       <ArrowRight size={16} />
-                    </a>
-                  </Button>
+                    </Button>
+                  </a>
                 </div>
               </div>
             </div>

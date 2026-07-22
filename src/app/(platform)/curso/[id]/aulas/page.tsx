@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { redirect, useParams, useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
   ChevronLeft,
@@ -297,6 +297,7 @@ const VideoPlayer = ({
             try {
               const url = new URL(current.lesson.bunny_video_url);
               url.searchParams.set("responsive", "true");
+              url.searchParams.set("loop", "false");
               return url.toString();
             } catch {
               return current.lesson.bunny_video_url;
@@ -623,7 +624,6 @@ const SidebarList = ({
 /* ───────────────────── Componente principal ───────────────────── */
 export default function LessonPlayerPage() {
   const { id } = useParams();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const courseId = Array.isArray(id) ? id[0] : id;
 
@@ -654,9 +654,9 @@ export default function LessonPlayerPage() {
 
   const goTo = useCallback(
     (mIdx: number, lIdx: number) => {
-      router.push(`/curso/${courseId}/aulas?modulo=${mIdx}&aula=${lIdx}`);
+      redirect(`/curso/${courseId}/aulas?modulo=${mIdx}&aula=${lIdx}`);
     },
-    [router, courseId],
+    [courseId],
   );
 
   // Navegar para a próxima aula e limpar countdown

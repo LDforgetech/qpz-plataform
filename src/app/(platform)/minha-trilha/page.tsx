@@ -263,7 +263,7 @@ const MyTrail = () => {
                           {key}
                         </span>
                         <span className="text-muted-foreground tabular-nums">
-                          {value.toFixed(value % 1 === 0 ? 0 : 2)}%
+                          {value.toFixed()}%
                         </span>
                       </div>
                       <Progress value={value} className="h-2" />

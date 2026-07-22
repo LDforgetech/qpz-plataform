@@ -1,23 +1,24 @@
 "use client";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/logo";
 import { SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/nextjs";
 import Link from "next/link";
+import { useSubscriptionStatus } from "@/hooks/useSubscriptionStatus";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { isLoaded, isSignedIn } = useAuth();
+  const { data, isLoading: isSubLoading } = useSubscriptionStatus({
+    enabled: !!isSignedIn,
+  });
 
   const links = [
     { label: "Início", href: "#" },
     { label: "Cursos", href: "#cursos" },
     { label: "Planos", href: "#planos" },
   ];
-
-  // Defina a rota para onde o usuário deve ir após logar/cadastrar
-  const redirectUrl = "./dashboard";
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
@@ -38,7 +39,7 @@ const Navbar = () => {
           {isLoaded && !isSignedIn && (
             <>
               {/* Adicionado forceRedirectUrl */}
-              <SignInButton mode="modal" forceRedirectUrl={redirectUrl}>
+              <SignInButton mode="modal" forceRedirectUrl="/#planos">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -49,26 +50,35 @@ const Navbar = () => {
               </SignInButton>
 
               {/* Adicionado forceRedirectUrl */}
-              <SignUpButton mode="modal" forceRedirectUrl={redirectUrl}>
+              <SignUpButton mode="modal" forceRedirectUrl="/#planos">
                 <Button
                   size="sm"
                   className="bg-accent text-accent-foreground hover:bg-accent/70 font-semibold shadow-sm"
                 >
-                  Começar Agora
+                  Criar Conta
                 </Button>
               </SignUpButton>
             </>
           )}
-          {isLoaded && isSignedIn && (
-            <div className="flex items-center justify-center gap-2">
+
+          <div className="flex items-center justify-center gap-2">
+            {isSignedIn && isSubLoading && (
+              <Button
+                disabled
+                className="h-8 w-[100px] opacity-50 bg-accent text-accent-foreground"
+              >
+                <Loader2 className="h-4 w-4 animate-spin" />
+              </Button>
+            )}
+            {isSignedIn && !isSubLoading && data?.is_active && (
               <Link href="./dashboard">
-                <Button className="bg-accent text-accent-foreground hover:bg-gold-dar h-8">
+                <Button className="bg-accent text-accent-foreground hover:bg-gold-dark h-8">
                   Dashboard
                 </Button>
               </Link>
-              <UserButton showName />
-            </div>
-          )}
+            )}
+            {isLoaded && isSignedIn && <UserButton showName />}
+          </div>
         </div>
 
         <button
@@ -95,7 +105,7 @@ const Navbar = () => {
             {isLoaded && !isSignedIn && (
               <>
                 {/* Adicionado forceRedirectUrl no Mobile */}
-                <SignInButton mode="modal" forceRedirectUrl={redirectUrl}>
+                <SignInButton mode="modal" forceRedirectUrl="/#planos">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -106,19 +116,35 @@ const Navbar = () => {
                 </SignInButton>
 
                 {/* Adicionado forceRedirectUrl no Mobile */}
-                <SignUpButton mode="modal" forceRedirectUrl={redirectUrl}>
+                <SignUpButton mode="modal" forceRedirectUrl="/#planos">
                   <Button
                     size="sm"
                     className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold w-full"
                   >
-                    Começar Agora
+                    Criar conta
                   </Button>
                 </SignUpButton>
               </>
             )}
             {isLoaded && isSignedIn && (
-              <div className="flex items-center justify-center w-full py-2">
-                <UserButton />
+              <div className="flex flex-col items-center w-full gap-3 py-2 border-t border-border mt-2">
+                <div className="flex items-center justify-between w-full px-2">
+                  <span className="text-sm font-medium text-foreground">
+                    Sua Conta
+                  </span>
+                  <UserButton />
+                </div>
+                {isSubLoading ? (
+                  <Button disabled className="w-full bg-accent opacity-50 h-9">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </Button>
+                ) : data?.is_active ? (
+                  <Link href="./dashboard" className="w-full">
+                    <Button className="w-full bg-accent text-accent-foreground hover:bg-gold-dark h-9">
+                      Acessar Dashboard
+                    </Button>
+                  </Link>
+                ) : null}
               </div>
             )}
           </div>

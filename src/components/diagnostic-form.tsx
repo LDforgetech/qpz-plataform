@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useSubmitProfile } from "@/hooks/useProfile";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
@@ -60,7 +60,6 @@ export type FormSection = {
 const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
-  const router = useRouter();
   const submitProfile = useSubmitProfile();
   const bodyRef = useRef<HTMLDivElement>(null);
 
@@ -266,13 +265,14 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
                   className="space-y-8"
                 >
                   {/* Renderizando as perguntas dinamicamente */}
-                  {sections[step].questions.map((question) => {
+                  {sections[step].questions.map((question, index) => {
                     const fieldName = `question_${question.id}`;
                     return (
                       <div
                         key={question.id}
                         className="space-y-4 bg-card/50 p-4 rounded-xl border border-border"
                       >
+                        <p className="font-display">Questão {index + 1}</p>
                         <Label className="text-base font-medium flex items-start gap-2">
                           <span className="text-accent font-bold">
                             {question.text_question}
@@ -357,7 +357,7 @@ const DiagnosticForm = ({ open, onOpenChange }: DiagnosticFormProps) => {
                 size="lg"
                 onClick={() => {
                   handleClose(false);
-                  router.push("/minha-trilha");
+                  redirect("/minha-trilha");
                 }}
                 className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold shadow-[var(--shadow-gold)]"
               >

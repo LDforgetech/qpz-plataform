@@ -1,45 +1,80 @@
-"use client";
-
 import Logo from "@/components/logo";
+
+const dataRoutes = [
+  {
+    title: "Empresa",
+    links: [
+      { label: "Sobre nós", href: "#" },
+      { label: "Contato", href: "#" },
+    ],
+  },
+  {
+    title: "Redes",
+    links: [
+      {
+        label: "Facebook",
+        href: "https://www.facebook.com/share/1Cm5N8xgKH/?mibextid=wwXIfr",
+      },
+      {
+        label: "Linkedin",
+        href: "https://www.linkedin.com/company/quatropontozero-rh/",
+      },
+      {
+        label: "Instagram",
+        href: "https://www.instagram.com/quatropontozero_rh?igsh=Z2FqcDByMmV3ejg1",
+      },
+      { label: "Palestras", href: "https://quatropontozero.com.br/" },
+    ],
+  },
+  {
+    title: "Institucional",
+    links: [
+      { label: "Termos de uso", href: "termos-e-condicoes" },
+      { label: "Ouvidoria", href: "#" },
+    ],
+  },
+];
 
 const Footer = () => (
   <footer className="bg-primary text-primary-foreground pt-16">
     <div className="container mx-auto px-4">
       <div className="grid md:grid-cols-4 gap-8">
         <div>
+          <div className="bg-white/10 p-4 rounded-2xl mb-4">
+            <Logo />
+          </div>
           <p className="text-sm text-primary-foreground/60 leading-relaxed">
             A plataforma líder em capacitação de RH e treinamentos corporativos
             no Brasil.
           </p>
         </div>
 
-        {[
-          {
-            title: "Plataforma",
-            links: ["Cursos", "Trilhas", "Certificados", "Mentorias"],
-          },
-          {
-            title: "Empresa",
-            links: ["Sobre nós", "Blog", "Carreiras", "Contato"],
-          },
-          {
-            title: "Suporte",
-            links: ["Central de ajuda", "Termos de uso", "Privacidade", "FAQ"],
-          },
-        ].map((col) => (
+        {dataRoutes.map((col) => (
           <div key={col.title}>
             <h4 className="font-semibold text-sm mb-4">{col.title}</h4>
             <ul className="space-y-2">
-              {col.links.map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
-                    className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
+              {col.title != "Redes"
+                ? col.links.map((link, i) => (
+                    <li key={i}>
+                      <a
+                        href={link.href}
+                        className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))
+                : col.links.map((link, i) => (
+                    <li key={i}>
+                      <a
+                        target="_blank"
+                        href={link.href}
+                        className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
             </ul>
           </div>
         ))}

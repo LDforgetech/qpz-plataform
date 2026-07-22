@@ -3,7 +3,6 @@
 import * as React from "react";
 
 import { NavProjects } from "@/components/nav-projects";
-import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -15,7 +14,7 @@ import {
   SparklesIcon,
   AwardIcon,
   BookUserIcon,
-  GraduationCapIcon,
+  Bookmark,
 } from "lucide-react";
 import Logo from "@/components/logo";
 
@@ -40,6 +39,11 @@ const data = {
       name: "Certificados",
       url: "/certificados",
       icon: <AwardIcon />,
+    },
+    {
+      name: "Meu plano",
+      url: "/gerenciar-plano",
+      icon: <Bookmark />,
     },
     {
       name: "Contato",
@@ -67,17 +71,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
         </div>
       </SidebarHeader>
-      {/* <SidebarHeader>
-        <div className="bg-accent/10 rounded-md p-4">
-          <Logo />
-        </div>
-      </SidebarHeader> */}
       <SidebarContent>
         <NavProjects projects={data.projects} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
+      <SidebarFooter>{/* <NavUser user={data.user} /> */}</SidebarFooter>
     </Sidebar>
   );
 }

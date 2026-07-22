@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { Search, Sparkles, BookOpen, ArrowRight, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -29,7 +29,6 @@ const SearchBar = () => {
   const [open, setOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
   const debouncedQuery = useDebounce(query, 300);
 
@@ -73,7 +72,6 @@ const SearchBar = () => {
   const goToResults = () => {
     if (!query.trim()) return;
     setOpen(false);
-    router.push(`/buscar?q=${encodeURIComponent(query.trim())}`);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -87,7 +85,7 @@ const SearchBar = () => {
       e.preventDefault();
       if (activeIdx >= 0 && flatItems[activeIdx]) {
         setOpen(false);
-        router.push(flatItems[activeIdx].href);
+        redirect(flatItems[activeIdx].href);
       } else {
         goToResults();
       }

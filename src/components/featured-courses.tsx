@@ -1,147 +1,137 @@
 "use client";
+
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { Clock, Users, Star, BookOpen } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useCourses } from "@/hooks/useCourses";
 
-const courses = [
-  {
-    title: "Gestão Estratégica de Pessoas",
-    category: "Liderança",
-    hours: 24,
-    students: 1840,
-    rating: 4.9,
-    description:
-      "Desenvolva competências para liderar equipes de alta performance com foco em resultados.",
-    badge: "Mais Popular",
-  },
-  {
-    title: "Recrutamento & Seleção 4.0",
-    category: "R&S",
-    hours: 16,
-    students: 1250,
-    rating: 4.8,
-    description:
-      "Técnicas modernas de atração de talentos com uso de People Analytics e IA.",
-    badge: null,
-  },
-  {
-    title: "Departamento Pessoal Completo",
-    category: "DP",
-    hours: 40,
-    students: 3200,
-    rating: 4.9,
-    description:
-      "Da admissão à rescisão: domine todos os processos do departamento pessoal.",
-    badge: "Certificado",
-  },
-  {
-    title: "Treinamento & Desenvolvimento",
-    category: "T&D",
-    hours: 20,
-    students: 980,
-    rating: 4.7,
-    description:
-      "Crie programas de capacitação que geram impacto real nos indicadores do negócio.",
-    badge: null,
-  },
-  {
-    title: "Compliance Trabalhista",
-    category: "Jurídico",
-    hours: 12,
-    students: 760,
-    rating: 4.8,
-    description:
-      "Garanta conformidade legal e reduza riscos trabalhistas na sua organização.",
-    badge: "Novo",
-  },
-  {
-    title: "Cultura e Clima Organizacional",
-    category: "Cultura",
-    hours: 18,
-    students: 1100,
-    rating: 4.9,
-    description:
-      "Construa uma cultura empresarial forte que engaje e retenha os melhores talentos.",
-    badge: null,
-  },
-];
-
-const FeaturedCourses = () => (
-  <section id="cursos" className="py-24 bg-background">
-    <div className="container mx-auto px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="text-center mb-16"
-      >
-        <span className="text-accent font-semibold text-sm uppercase tracking-widest">
-          Catálogo
-        </span>
-        <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mt-2">
-          Cursos em Destaque
-        </h2>
-        <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-          Conteúdos desenvolvidos por especialistas com experiência de mercado,
-          atualizados com as últimas tendências de RH.
-        </p>
-      </motion.div>
-
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.map((course, i) => (
-          <motion.div
-            key={course.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="group bg-card rounded-xl border border-border p-6 hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 cursor-pointer"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-semibold uppercase tracking-wider text-accent">
-                {course.category}
-              </span>
-              {course.badge && (
-                <Badge className="bg-primary text-primary-foreground text-xs">
-                  {course.badge}
-                </Badge>
-              )}
-            </div>
-
-            <h3 className="font-display text-lg font-semibold text-foreground group-hover:text-navy-light transition-colors">
-              {course.title}
-            </h3>
-            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-              {course.description}
-            </p>
-
-            <div className="flex items-center gap-4 mt-6 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Clock size={14} /> {course.hours}h
-              </span>
-              <span className="flex items-center gap-1">
-                <Users size={14} /> {course.students.toLocaleString("pt-BR")}
-              </span>
-              <span className="flex items-center gap-1 text-accent">
-                <Star size={14} fill="currentColor" /> {course.rating}
-              </span>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      <div className="text-center mt-12">
-        <a
-          href="#"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-gold-dark transition-colors"
+function CoursesSkeleton() {
+  return (
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {[1, 2, 3, 4, 5, 6].map((item) => (
+        <div
+          key={item}
+          className="overflow-hidden rounded-xl border border-border bg-card animate-pulse"
         >
-          <BookOpen size={16} />
-          Ver todos os cursos →
-        </a>
-      </div>
-    </div>
-  </section>
-);
+          <div className="h-44 bg-muted" />
 
-export default FeaturedCourses;
+          <div className="p-6">
+            <div className="mb-4 h-3 w-20 rounded bg-muted" />
+            <div className="mb-3 h-6 w-4/5 rounded bg-muted" />
+            <div className="h-4 w-full rounded bg-muted" />
+            <div className="mt-2 h-4 w-3/4 rounded bg-muted" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default function FeaturedCourses() {
+  const { data: allCourses, isLoading, isError } = useCourses();
+
+  // Mostra no máximo 6 cursos na landing page
+  const courses = allCourses?.slice(0, 6) ?? [];
+
+  return (
+    <section id="cursos" className="scroll-mt-20 bg-background py-24">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-16 text-center"
+        >
+          <span className="text-sm font-semibold uppercase tracking-widest text-accent">
+            Catálogo
+          </span>
+
+          <h2 className="mt-2 text-3xl font-display font-bold text-foreground md:text-4xl">
+            Cursos em Destaque
+          </h2>
+
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+            Conteúdos desenvolvidos por especialistas com experiência de
+            mercado, atualizados com as últimas tendências de RH.
+          </p>
+        </motion.div>
+
+        {isLoading && <CoursesSkeleton />}
+
+        {isError && (
+          <div className="text-center text-muted-foreground">
+            Não foi possível carregar os cursos. Tente novamente mais tarde.
+          </div>
+        )}
+
+        {!isLoading && !isError && courses.length === 0 && (
+          <div className="text-center text-muted-foreground">
+            Nenhum curso disponível no momento.
+          </div>
+        )}
+
+        {!isLoading && !isError && courses.length > 0 && (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {courses.map((course, index) => (
+              <motion.article
+                key={course.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:shadow-[var(--shadow-card-hover)]"
+              >
+                <div className="relative h-44 w-full overflow-hidden bg-muted">
+                  {course.cover_url ? (
+                    <Image
+                      src={course.cover_url}
+                      alt={`Capa do curso ${course.title}`}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-muted-foreground">
+                      <BookOpen size={36} />
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-6">
+                  <div className="mb-4 flex items-center justify-between">
+                    <Badge className="bg-primary text-xs text-primary-foreground">
+                      Curso
+                    </Badge>
+                  </div>
+
+                  <h3 className="line-clamp-2 font-display text-lg font-semibold text-foreground transition-colors group-hover:text-navy-light">
+                    {course.title}
+                  </h3>
+
+                  <p
+                    className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground"
+                    title={course.description}
+                  >
+                    {course.description}
+                  </p>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-12 text-center">
+          <a
+            href="#planos"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-accent transition-colors hover:text-gold-dark"
+          >
+            <BookOpen size={16} />
+            Ver planos e acessar os cursos →
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}

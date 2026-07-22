@@ -31,13 +31,43 @@ async function request<T>(
     method,
     headers: {
       "Content-Type": "application/json",
+      Accept: "application/json",
       ...auth,
       ...config?.headers,
     },
   });
 
   if (!response.ok) {
-    throw new Error(`Erro ${response.status}: ${response.statusText}`);
+    let msg = `Erro ${response.status}: ${response.statusText}`;
+    try {
+      const errData = await response.json();
+      if (errData.message) msg = errData.message;
+      else if (errData.error) msg = errData.error;
+
+      if (errData.errors) {
+        const firstError = Object.values(errData.errors)[0];
+        if (Array.isArray(firstError)) msg = firstError[0];
+      }
+    } catch {}
+    if (!response.ok) {
+      let body: any = null;
+
+      try {
+        body = await response.json();
+      } catch {}
+
+      const error = new Error(
+        body?.message ?? body?.error ?? `Erro ${response.status}`,
+      ) as Error & {
+        status: number;
+        data?: any;
+      };
+
+      error.status = response.status;
+      error.data = body;
+
+      throw error;
+    }
   }
 
   return response.json();
@@ -59,3 +89,29 @@ export const api = {
   delete: <T>(url: string, config?: RequestInit) =>
     request<T>(url, "DELETE", config),
 };
+
+// ── Server-side fetch ───────────────────────────────────────────────
+// Para uso em layouts e Server Components onde o AuthProvider não está
+// disponível. O token JWT deve ser passado explicitamente.
+export async function serverFetch<T>(
+  url: string,
+  token: string,
+  config?: RequestInit,
+): Promise<T> {
+  const response = await fetch(`${BASE_URL}${url}`, {
+    ...config,
+    method: config?.method ?? "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+      ...config?.headers,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Erro ${response.status}: ${response.statusText}`);
+  }
+
+  return response.json();
+}

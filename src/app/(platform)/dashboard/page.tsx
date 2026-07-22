@@ -11,7 +11,6 @@ import {
   Sparkles,
   BookOpen,
   ChevronRight,
-  Calendar,
   Layers,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -237,6 +236,16 @@ const Dashboard = () => {
           {isLoadingTrails ? (
             <div className="flex justify-center py-10">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary text-primary"></div>
+            </div>
+          ) : !trails || trails.length === 0 ? (
+            <div className="py-14 text-center">
+              <p className="font-display text-base font-semibold text-foreground">
+                Nenhuma trilha de cursos disponível
+              </p>
+
+              <p className="mt-2 text-sm text-muted-foreground">
+                Novas trilhas serão adicionadas em breve.
+              </p>
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
