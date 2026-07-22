@@ -15,9 +15,9 @@ const Navbar = () => {
   });
 
   const links = [
-    { label: "Início", href: "#" },
-    { label: "Cursos", href: "#cursos" },
-    { label: "Planos", href: "#planos" },
+    { label: "Início", href: "./" },
+    { label: "Cursos", href: "./#cursos" },
+    { label: "Planos", href: "./#planos" },
   ];
 
   return (

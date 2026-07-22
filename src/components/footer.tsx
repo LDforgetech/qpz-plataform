@@ -30,6 +30,7 @@ const dataRoutes = [
     title: "Institucional",
     links: [
       { label: "Termos de uso", href: "termos-e-condicoes" },
+      { label: "Política de Privacidade", href: "politicas-de-privacidade" },
       { label: "Ouvidoria", href: "#" },
     ],
   },
