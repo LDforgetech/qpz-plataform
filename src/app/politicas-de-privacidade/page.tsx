@@ -265,7 +265,7 @@ const sections: Section[] = [
       {
         type: "text",
         value:
-          "Adotamos medidas de segurança adequadas para nos proteger contra acesso não autorizado, alteração, divulgação ou destruição dos dados pessoais do usuário por nós coletados e armazenados. Essas medidas variam com base no tipo e na confidencialidade dos dados. Infelizmente, no entanto, nenhum sistema pode ser 100% protegido. Por isso, não podemos garantir que as comunicações entre o usuário e a (nome da plataforma) ou qualquer informação fornecida à (nome da plataforma) em relação aos dados por nós coletados por meio do site estejam livres de acesso não autorizado por terceiros. A senha do usuário é uma parte importante do nosso sistema de segurança, e é responsabilidade do usuário protegê-la. Não compartilhe a senha com terceiros. Em caso de suspeita de violação da senha ou conta, altere-a imediatamente e entre em contato com suporte@origamid.com para sanar a situação.",
+          "Adotamos medidas de segurança adequadas para nos proteger contra acesso não autorizado, alteração, divulgação ou destruição dos dados pessoais do usuário por nós coletados e armazenados. Essas medidas variam com base no tipo e na confidencialidade dos dados. Infelizmente, no entanto, nenhum sistema pode ser 100% protegido. Por isso, não podemos garantir que as comunicações entre o usuário e a (nome da plataforma) ou qualquer informação fornecida à (nome da plataforma) em relação aos dados por nós coletados por meio do site estejam livres de acesso não autorizado por terceiros. A senha do usuário é uma parte importante do nosso sistema de segurança, e é responsabilidade do usuário protegê-la. Não compartilhe a senha com terceiros. Em caso de suspeita de violação da senha ou conta, altere-a imediatamente e entre em contato com conosco para sanar a situação.",
       },
     ],
   },
@@ -288,7 +288,7 @@ const sections: Section[] = [
         type: "list",
         items: [
           {
-            text: "O usuário pode optar por não fornecer determinados dados à Origamid, mas é possível que não consiga usar determinados recursos do site.",
+            text: "O usuário pode optar por não fornecer determinados dados à (nome da plataforma), mas é possível que não consiga usar determinados recursos do site.",
           },
           {
             text: "O navegador ou dispositivo utilizado pelo usuário pode permitir o controle de cookies e outros tipos de armazenamento local de dados. Dispositivos sem fio podem também permitir o controle da coleta e do compartilhamento da localização ou de outros dados.",
@@ -299,7 +299,7 @@ const sections: Section[] = [
         type: "subtitle",
         title: "6.2 Acesso, manutenção e exclusão de dados",
         value:
-          "Para acessar e atualizar os dados pessoais coletados e mantidos pela Origamid, o usuário pode:",
+          "Para acessar e atualizar os dados pessoais coletados e mantidos pela (nome da plataforma), o usuário pode:",
       },
       {
         type: "list",
@@ -311,13 +311,10 @@ const sections: Section[] = [
             text: "Para garantir a integridade dos certificados fornecidos aos usuários, o nome associado a conta e o email só podem ser modificados pelo administrador do site.",
           },
           {
-            text: "Para encerrar a conta, o usuário deverá enviar um e-mail para contato@origamid.com.",
-          },
-          {
             text: "Observação: Mesmo depois de encerrada a conta, reteremos os dados do usuário enquanto tivermos um propósito legítimo para assim o fazer, inclusive para ajudar em obrigações legais, resolver conflitos e fazer cumprir nossos contratos. Poderemos reter e divulgar esses dados de acordo com esta Política de Privacidade depois do encerramento da conta do usuário.",
           },
           {
-            text: "Para solicitar acesso, corrigir ou excluir dados pessoais, envie um e-mail para contato@plataformaquatropontozero.com.br. Aguarde até 72 horas para obter uma resposta. Por questão de proteção do usuário, poderemos pedir que a solicitação seja enviada pelo endereço de e-mail associado à conta do usuário. Pode ser necessário confirmar a identidade do usuário antes de implementar a solicitação. Vale ressaltar que retemos certos dados quando temos direito de assim o fazer, inclusive em caso de manutenção obrigatória de registros e para realizar transações.",
+            text: "Para solicitar acesso, corrigir ou excluir dados pessoais, entre em contato pelo nosso formulário de contato. Aguarde até 72 horas para obter uma resposta. Por questão de proteção do usuário, poderemos pedir que a solicitação seja enviada pelo endereço de e-mail associado à conta do usuário. Pode ser necessário confirmar a identidade do usuário antes de implementar a solicitação. Vale ressaltar que retemos certos dados quando temos direito de assim o fazer, inclusive em caso de manutenção obrigatória de registros e para realizar transações.",
           },
         ],
       },

@@ -1,10 +1,9 @@
 "use client";
 
-import { Bell } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { UserButton, useUser } from "@clerk/nextjs";
 import SearchBar from "@/components/search-bar";
+import { NotificationBell } from "@/components/notification-bell";
 
 export function AppHeader() {
   const { isLoaded, isSignedIn } = useUser();
@@ -20,9 +19,7 @@ export function AppHeader() {
 
         {/* Right: notifications + user */}
         <div className="flex items-center gap-3 ml-4">
-          <Button variant="ghost" size="icon" className="text-muted-foreground">
-            <Bell size={18} />
-          </Button>
+          <NotificationBell />
           {isLoaded && isSignedIn && <UserButton showName />}
         </div>
       </div>

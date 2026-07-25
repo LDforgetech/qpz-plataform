@@ -44,8 +44,6 @@ const Dashboard = () => {
 
   const { data: trails = [], isLoading: isLoadingTrails } = useTrails();
 
-  const planExpiresIn = 247;
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Main */}
