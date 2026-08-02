@@ -3,18 +3,11 @@ import Logo from "@/components/logo";
 const dataRoutes = [
   {
     title: "Empresa",
-    links: [
-      { label: "Sobre nós", href: "#" },
-      { label: "Contato", href: "#" },
-    ],
+    links: [{ label: "Sobre nós", href: "https://quatropontozero.com.br/" }],
   },
   {
     title: "Redes",
     links: [
-      {
-        label: "Facebook",
-        href: "https://www.facebook.com/share/1Cm5N8xgKH/?mibextid=wwXIfr",
-      },
       {
         label: "Linkedin",
         href: "https://www.linkedin.com/company/quatropontozero-rh/",
@@ -23,7 +16,6 @@ const dataRoutes = [
         label: "Instagram",
         href: "https://www.instagram.com/quatropontozero_rh?igsh=Z2FqcDByMmV3ejg1",
       },
-      { label: "Palestras", href: "https://quatropontozero.com.br/" },
     ],
   },
   {
@@ -31,7 +23,7 @@ const dataRoutes = [
     links: [
       { label: "Termos de uso", href: "termos-e-condicoes" },
       { label: "Política de Privacidade", href: "politicas-de-privacidade" },
-      { label: "Ouvidoria", href: "#" },
+      { label: "Ouvidoria", href: "ouvidoria" },
     ],
   },
 ];

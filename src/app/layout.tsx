@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import { AuthProvider } from "@/components/auth-provider";
 import { QueryProvider } from "@/components/query-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { CookieBanner } from "@/components/cookie-banner";
 import { ptBR } from "@clerk/localizations";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -43,6 +45,8 @@ export default function RootLayout({
         <body>
           <AuthProvider>
             <QueryProvider>{children}</QueryProvider>
+            <Toaster richColors position="top-right" />
+            <CookieBanner />
           </AuthProvider>
         </body>
       </html>

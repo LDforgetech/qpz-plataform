@@ -1,40 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { Mail, Send, MessageCircle, CheckCircle } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { Mail, MessageCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { SupportForm } from "@/components/support-form";
 
 const contactInfo = [
   {
     icon: Mail,
     label: "E-mail",
     value: "suporte@capitalhumano.com.br",
-    description: "Respondemos em até 36h",
+    description: "Respondemos em até 72h",
   },
 ];
 
 export default function ContactPage() {
-  const [submitted, setSubmitted] = useState(false);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    setSubmitted(true);
-  };
-
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-background">
       {/* Hero */}
@@ -69,117 +48,7 @@ export default function ContactPage() {
           <div className="lg:col-span-3">
             <Card className="border-border/60">
               <CardContent className="p-6 md:p-8">
-                {submitted ? (
-                  <div className="py-12 text-center">
-                    <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10">
-                      <CheckCircle className="text-emerald-500" size={32} />
-                    </div>
-
-                    <h3 className="font-display mb-2 text-xl font-bold text-foreground">
-                      Mensagem enviada!
-                    </h3>
-
-                    <p className="text-muted-foreground mb-6">
-                      Agradecemos pelo contato. Responderemos o mais breve
-                      possível.
-                    </p>
-
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setSubmitted(false);
-
-                        setFormData({
-                          name: "",
-                          email: "",
-                          subject: "",
-                          message: "",
-                        });
-                      }}
-                    >
-                      Enviar nova mensagem
-                    </Button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    <div className="grid gap-5 sm:grid-cols-2">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Nome completo</Label>
-
-                        <Input
-                          id="name"
-                          placeholder="Seu nome"
-                          value={formData.name}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              name: e.target.value,
-                            })
-                          }
-                          required
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="email">E-mail</Label>
-
-                        <Input
-                          id="email"
-                          type="email"
-                          placeholder="seu@email.com"
-                          value={formData.email}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              email: e.target.value,
-                            })
-                          }
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="subject">Assunto</Label>
-
-                      <Input
-                        id="subject"
-                        placeholder="Qual o motivo do contato?"
-                        value={formData.subject}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            subject: e.target.value,
-                          })
-                        }
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="message">Mensagem</Label>
-
-                      <Textarea
-                        id="message"
-                        placeholder="Descreva sua dúvida ou solicitação..."
-                        rows={5}
-                        value={formData.message}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            message: e.target.value,
-                          })
-                        }
-                        required
-                      />
-                    </div>
-
-                    <Button type="submit" className="w-full gap-2 sm:w-auto">
-                      <Send size={16} />
-                      Enviar mensagem
-                    </Button>
-                  </form>
-                )}
+                <SupportForm type="contato" />
               </CardContent>
             </Card>
           </div>
@@ -187,48 +56,27 @@ export default function ContactPage() {
           {/* Info */}
           <div className="space-y-4 lg:col-span-2">
             {contactInfo.map((item) => (
-              <Card key={item.label} className="border-border/60">
-                <CardContent className="flex items-center gap-4 px-5 py-0">
-                  <div className="bg-primary/10 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg">
-                    <item.icon className="text-primary" size={18} />
+              <div
+                key={item.value}
+                className="bg-gradient-to-br from-primary to-navy-light rounded-xl p-6 text-primary-foreground"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                    <item.icon className=" text-accent" size={18} />
                   </div>
 
-                  <div>
-                    <p className="text-md font-bold text-foreground">
+                  <div className="flex-1">
+                    <h3 className="font-display font-bold text-lg">
                       {item.label}
-                    </p>
+                    </h3>
 
-                    <p className="text-sm text-foreground">{item.value}</p>
-
-                    <p className="text-muted-foreground text-xs">
+                    <p className="text-sm text-primary-foreground/70 leading-relaxed">
                       {item.description}
                     </p>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
-
-            {/* CTA */}
-            <div className="from-primary to-navy-light mt-6 rounded-xl bg-gradient-to-br p-6 text-primary-foreground">
-              <h3 className="font-display mb-2 text-lg font-bold">
-                Precisa de ajuda urgente?
-              </h3>
-
-              <p className="text-primary-foreground/70 mb-4 text-sm">
-                Acesse nossa central de ajuda com artigos e tutoriais sobre a
-                plataforma.
-              </p>
-
-              <Link href="/dashboard">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="bg-accent text-accent-foreground hover:bg-gold-dark text-xs"
-                >
-                  Ir para a central
-                </Button>
-              </Link>
-            </div>
           </div>
         </div>
       </div>

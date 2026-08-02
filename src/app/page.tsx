@@ -5,6 +5,7 @@ import FeaturedCourses from "@/components/featured-courses";
 import PricingPlans from "@/components/pricing-plans";
 import Footer from "@/components/footer";
 import PersonalizedPath from "@/components/personalized-path";
+import Testimonials from "@/components/testimonials";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <PersonalizedPath />
       <FeaturedCourses />
       <PricingPlans />
+      <Testimonials />
       <Footer />
     </div>
   );

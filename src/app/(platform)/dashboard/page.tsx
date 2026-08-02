@@ -28,11 +28,11 @@ type Course = {
   cover_url: string;
 };
 
-const stats = [
-  { label: "Horas estudadas", value: "47h", icon: Clock },
-  { label: "Cursos concluídos", value: "5", icon: Award },
-  { label: "Sequência", value: "12 dias", icon: TrendingUp },
-];
+// const stats = [
+//   { label: "Horas estudadas", value: "47h", icon: Clock },
+//   { label: "Cursos concluídos", value: "5", icon: Award },
+//   { label: "Sequência", value: "12 dias", icon: TrendingUp },
+// ];
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -95,31 +95,6 @@ const Dashboard = () => {
           </motion.section>
         )}
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-          {stats.map((stat, i) => {
-            const Icon = stat.icon;
-            return (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="bg-card border border-border rounded-xl p-5 flex items-center gap-4"
-              >
-                <div className="w-11 h-11 rounded-lg bg-secondary flex items-center justify-center text-primary">
-                  <Icon size={20} />
-                </div>
-                <div>
-                  <p className="text-2xl font-display font-bold text-foreground">
-                    {stat.value}
-                  </p>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
         {/* Cursos */}
         <section className="mb-12">
           <div className="flex items-center justify-between mb-5">

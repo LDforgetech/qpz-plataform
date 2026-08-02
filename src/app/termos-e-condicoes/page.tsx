@@ -1,15 +1,9 @@
 import Link from "next/link";
 import {
-  FileText,
-  Shield,
   UserCheck,
-  CreditCard,
-  AlertTriangle,
-  HelpCircle,
   HandCoins,
   Info,
   Handshake,
-  File,
   PcCase,
   Cookie,
 } from "lucide-react";
@@ -19,7 +13,6 @@ import Navbar from "@/components/nav-bar";
 import Footer from "@/components/footer";
 
 /* ── Content types ── */
-
 type TextItem = {
   type: "text";
   value: string;
