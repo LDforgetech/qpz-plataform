@@ -49,7 +49,6 @@ export function SupportForm({ type }: SupportFormProps) {
     clearErrors,
     formState: { errors },
   } = useForm<SupportFormData | OuvidoriaFormData>({
-    // @ts-expect-error — Zod v4 types não são totalmente compatíveis com @hookform/resolvers (issue conhecida)
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
@@ -176,7 +175,10 @@ export function SupportForm({ type }: SupportFormProps) {
       {isOuvidoria && (
         <div className="space-y-2">
           <ReCAPTCHA
-            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6Ld7g2YtAAAAAPBM-QErYZobiLE9crVSpMObG-Qx"}
+            sitekey={
+              process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ||
+              "6Ld7g2YtAAAAAPBM-QErYZobiLE9crVSpMObG-Qx"
+            }
             onChange={(token) => {
               if (token) {
                 setValue("recaptchaToken", token, { shouldValidate: true });
