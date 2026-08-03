@@ -28,7 +28,7 @@ import { api } from "@/lib/api";
 const getCancelSchema = (paymentMethod: string) => {
   return z
     .object({
-      confirmation: z.string().refine((val) => val === "CANCELAR", {
+      confirmation: z.string().refine((val) => val === "CANCELAR" || "", {
         message: 'Você deve digitar "CANCELAR" para confirmar.',
       }),
       reason: z.string().optional(),
