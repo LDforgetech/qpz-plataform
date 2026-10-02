@@ -71,7 +71,7 @@ const sections: Section[] = [
             text: "Dados dos cursos: Quando o usuário assina um Plano, coletamos alguns dados, como quais cursos foram iniciados e concluídos pelo usuário.",
           },
           {
-            text: "Dados sobre pagamento dos usuários: Quando o usuário assina um Plano, coletamos alguns dados sobre a compra em questão (tais como nome e CEP do usuário) quando necessário para processar o pedido. Cabe ao usuário fornecer determinados dados sobre pagamento e fatura diretamente aos nossos parceiros de processamento de pagamentos, entre eles nome do usuário, informações sobre o cartão de crédito, endereço de faturamento e CEP. Por questões de segurança, a (nome da plataforma) não coleta nem armazena dados confidenciais do titular do cartão, tais como o número completo do cartão de crédito ou os dados de autenticação do cartão.",
+            text: "Dados sobre pagamento dos usuários: Quando o usuário assina um Plano, coletamos alguns dados sobre a compra em questão (tais como nome e CEP do usuário) quando necessário para processar o pedido. Cabe ao usuário fornecer determinados dados sobre pagamento e fatura diretamente aos nossos parceiros de processamento de pagamentos, entre eles nome do usuário, informações sobre o cartão de crédito, endereço de faturamento e CEP. Por questões de segurança, a ElevareQPZ não coleta nem armazena dados confidenciais do titular do cartão, tais como o número completo do cartão de crédito ou os dados de autenticação do cartão.",
           },
           {
             text: "Comunicações e suporte: Caso o usuário entre em contato para obter suporte ou relatar um problema ou dúvida (independentemente de ter criado uma conta), coletamos e armazenamos as informações de contato do usuário, bem como mensagens e outros dados sobre o usuário, tais como nome, endereço de e-mail, localização, sistema operacional, endereço IP e quaisquer outros dados que o usuário forneça ou que coletemos por meios automatizados (abordados abaixo). Estes dados serão usados para responder ao usuário e pesquisar sobre a dúvida apresentada, de acordo com esta Política de Privacidade.",
@@ -106,7 +106,7 @@ const sections: Section[] = [
       {
         type: "text",
         value:
-          "Os dados são armazenados pela (nome da plataforma) e associados à conta do usuário.",
+          "Os dados são armazenados pela ElevareQPZ e associados à conta do usuário.",
       },
     ],
   },
@@ -129,7 +129,7 @@ const sections: Section[] = [
         type: "subtitle",
         title: "2.1 Cookies e ferramentas de coleta automatizadas",
         value:
-          "A (nome da plataforma) e os provedores de serviços que atuam em nome da (nome da plataforma) (como o Google Analytics e anunciantes parceiros) usam cookies, tags, scripts, links personalizados, rastros de dispositivos ou navegadores para coleta automatizada de dados (coletivamente, “Ferramentas de coleta de dados”), quando o usuário acessa e usa o site.",
+          "A ElevareQPZ e os provedores de serviços que atuam em nome da ElevareQPZ (como o Google Analytics e anunciantes parceiros) usam cookies, tags, scripts, links personalizados, rastros de dispositivos ou navegadores para coleta automatizada de dados (coletivamente, “Ferramentas de coleta de dados”), quando o usuário acessa e usa o site.",
       },
       {
         type: "text",
@@ -138,7 +138,7 @@ const sections: Section[] = [
       },
       {
         type: "text",
-        value: "A (nome da plataforma) usa os seguintes tipos de cookies:",
+        value: "A ElevareQPZ usa os seguintes tipos de cookies:",
       },
       {
         type: "list",
@@ -230,7 +230,7 @@ const sections: Section[] = [
         type: "list",
         items: [
           {
-            text: "Com prestadores de serviços, contratados e representantes: Compartilhamos os dados do usuário com empresas terceirizadas que prestam serviços para nossa Empresa, tais como processamento de pagamentos, análise de dados, serviços de marketing e publicidade (inclusive publicidade redirecionada), serviços de e-mail e hospedagem e atendimento e suporte ao cliente. Estes provedores de serviços podem acessar os dados pessoais do usuário e são obrigados a usá-los somente conforme orientados pela (nome da plataforma), para fornecer o serviço solicitado.",
+            text: "Com prestadores de serviços, contratados e representantes: Compartilhamos os dados do usuário com empresas terceirizadas que prestam serviços para nossa Empresa, tais como processamento de pagamentos, análise de dados, serviços de marketing e publicidade (inclusive publicidade redirecionada), serviços de e-mail e hospedagem e atendimento e suporte ao cliente. Estes provedores de serviços podem acessar os dados pessoais do usuário e são obrigados a usá-los somente conforme orientados pela ElevareQPZ, para fornecer o serviço solicitado.",
           },
           {
             text: "Com serviços de análise de dados: Como parte do uso que fazemos de ferramentas de análise de terceiros, como o Google Analytics, compartilhamos algumas informações de contato, dados da conta, dados do sistema, dados sobre utilização ou dados não identificados, conforme necessário. Dados não identificados significam dados dos quais foram removidas informações, tais como o nome e o endereço de e-mail do usuário, que são substituídas por um ID de token. Desta forma, os provedores podem fornecer serviços de análise ou combinar os dados do usuário com informações de bancos de dados disponíveis publicamente (inclusive informações de contato e sociais provenientes de outras fontes). O objetivo é nos comunicarmos com o usuário de maneira mais eficaz e personalizada.",
@@ -248,7 +248,7 @@ const sections: Section[] = [
             text: "Necessária para detectar, prevenir ou solucionar casos de fraude, abuso, uso indevido, possíveis violações da lei ou questões técnicas ou de segurança; ou",
           },
           {
-            text: "Para proteger contra danos iminentes aos direitos, propriedades ou seguranças da (nome da plataforma);",
+            text: "Para proteger contra danos iminentes aos direitos, propriedades ou seguranças da ElevareQPZ;",
           },
           {
             text: "Poderemos também divulgar dados sobre o usuário para nossos advogados e consultores jurídicos, a fim de avaliar nossas obrigações e direitos de divulgação ao abrigo desta Política de Privacidade.",
@@ -265,7 +265,7 @@ const sections: Section[] = [
       {
         type: "text",
         value:
-          "Adotamos medidas de segurança adequadas para nos proteger contra acesso não autorizado, alteração, divulgação ou destruição dos dados pessoais do usuário por nós coletados e armazenados. Essas medidas variam com base no tipo e na confidencialidade dos dados. Infelizmente, no entanto, nenhum sistema pode ser 100% protegido. Por isso, não podemos garantir que as comunicações entre o usuário e a (nome da plataforma) ou qualquer informação fornecida à (nome da plataforma) em relação aos dados por nós coletados por meio do site estejam livres de acesso não autorizado por terceiros. A senha do usuário é uma parte importante do nosso sistema de segurança, e é responsabilidade do usuário protegê-la. Não compartilhe a senha com terceiros. Em caso de suspeita de violação da senha ou conta, altere-a imediatamente e entre em contato com conosco para sanar a situação.",
+          "Adotamos medidas de segurança adequadas para nos proteger contra acesso não autorizado, alteração, divulgação ou destruição dos dados pessoais do usuário por nós coletados e armazenados. Essas medidas variam com base no tipo e na confidencialidade dos dados. Infelizmente, no entanto, nenhum sistema pode ser 100% protegido. Por isso, não podemos garantir que as comunicações entre o usuário e a ElevareQPZ ou qualquer informação fornecida à ElevareQPZ em relação aos dados por nós coletados por meio do site estejam livres de acesso não autorizado por terceiros. A senha do usuário é uma parte importante do nosso sistema de segurança, e é responsabilidade do usuário protegê-la. Não compartilhe a senha com terceiros. Em caso de suspeita de violação da senha ou conta, altere-a imediatamente e entre em contato com conosco para sanar a situação.",
       },
     ],
   },
@@ -288,7 +288,7 @@ const sections: Section[] = [
         type: "list",
         items: [
           {
-            text: "O usuário pode optar por não fornecer determinados dados à (nome da plataforma), mas é possível que não consiga usar determinados recursos do site.",
+            text: "O usuário pode optar por não fornecer determinados dados à ElevareQPZ, mas é possível que não consiga usar determinados recursos do site.",
           },
           {
             text: "O navegador ou dispositivo utilizado pelo usuário pode permitir o controle de cookies e outros tipos de armazenamento local de dados. Dispositivos sem fio podem também permitir o controle da coleta e do compartilhamento da localização ou de outros dados.",
@@ -299,7 +299,7 @@ const sections: Section[] = [
         type: "subtitle",
         title: "6.2 Acesso, manutenção e exclusão de dados",
         value:
-          "Para acessar e atualizar os dados pessoais coletados e mantidos pela (nome da plataforma), o usuário pode:",
+          "Para acessar e atualizar os dados pessoais coletados e mantidos pela ElevareQPZ, o usuário pode:",
       },
       {
         type: "list",
@@ -424,7 +424,7 @@ export default function TermsPage() {
                 Esta Política de Privacidade sumariza nossas práticas de coleta
                 e tratamento de dados e descreve os direitos do usuário de
                 acessar, corrigir ou limitar o uso de seus dados pessoais por
-                parte da (nome da plataforma).
+                parte da ElevareQPZ.
               </p>
 
               <p className="mt-4 text-sm text-primary-foreground/50">

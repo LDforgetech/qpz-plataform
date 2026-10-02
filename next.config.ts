@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "qpz-plataform-prod.b-cdn.net", // O domínio exato da Pull Zone de produção
+        hostname: "qpz-dev.b-cdn.net", // O domínio exato da Pull Zone de produção
         port: "",
         pathname: "/**", // Permite qualquer subpasta ou arquivo dentro da CDN
       },

@@ -89,7 +89,7 @@ const sections: Section[] = [
       {
         type: "text",
         value:
-          "2.1 Ao registrar-se na (nome da plataforma), a pessoa receberá uma licença pelo tempo escolhido no ato da inscrição, concedendo acesso e visualização dos cursos através da nossa plataforma online.",
+          "2.1 Ao registrar-se na ElevareQPZ, a pessoa receberá uma licença pelo tempo escolhido no ato da inscrição, concedendo acesso e visualização dos cursos através da nossa plataforma online.",
       },
       {
         type: "text",
@@ -99,7 +99,7 @@ const sections: Section[] = [
       {
         type: "text",
         value:
-          "2.3 Em termos legais e mais abrangentes, a (nome da plataforma) concede uma licença limitada e intransferível para acessar e visualizar os cursos e conteúdos associados cuja assinatura necessária tenha sido paga, exclusivamente para fins pessoais, educacionais e não comerciais. Todas as outras formas de uso são expressamente proibidas. É proibido reproduzir, redistribuir, transmitir, ceder, vender, transmitir por rádio ou televisão, alugar, compartilhar, emprestar, modificar, adaptar, editar, criar obras derivadas, sublicenciar ou de qualquer outra forma transferir qualquer curso. Essa condição se aplica também a qualquer conteúdo que possa ser acessado por meio de qualquer uma de nossas APIs.",
+          "2.3 Em termos legais e mais abrangentes, a ElevareQPZ concede uma licença limitada e intransferível para acessar e visualizar os cursos e conteúdos associados cuja assinatura necessária tenha sido paga, exclusivamente para fins pessoais, educacionais e não comerciais. Todas as outras formas de uso são expressamente proibidas. É proibido reproduzir, redistribuir, transmitir, ceder, vender, transmitir por rádio ou televisão, alugar, compartilhar, emprestar, modificar, adaptar, editar, criar obras derivadas, sublicenciar ou de qualquer outra forma transferir qualquer curso. Essa condição se aplica também a qualquer conteúdo que possa ser acessado por meio de qualquer uma de nossas APIs.",
       },
       {
         type: "text",
@@ -127,13 +127,13 @@ const sections: Section[] = [
       {
         type: "text",
         value:
-          "3.2.2 No momento da compra a pessoa deverá escolher a forma de pagamento mais adequada, entre elas a (nome da plataforma) disponibiliza o intermediador AbacatePay. Estes intermediador oferece diversas formas de pagamento e parcelamento.",
+          "3.2.2 No momento da compra a pessoa deverá escolher a forma de pagamento mais adequada, entre elas a ElevareQPZ disponibiliza o intermediador AbacatePay. Estes intermediador oferece diversas formas de pagamento e parcelamento.",
       },
       {
         type: "subtitle",
         title: "3.3 Parcelamento:",
         value:
-          "3.3.1 A (nome da plataforma) oferece parcelamento em até 12x sem juros dos planos.",
+          "3.3.1 A ElevareQPZ oferece parcelamento em até 12x sem juros dos planos.",
       },
       {
         type: "text",
@@ -165,7 +165,7 @@ const sections: Section[] = [
         type: "subtitle",
         title: "3.5 Termos dos intermediadores:",
         value:
-          "3.5.1 Optando por pagamento através de um intermediador, a pessoa é responsável pelo cumprimento das cláusulas contratuais vigentes pelo intermediador, não sendo a (nome da plataforma) responsável por aprovação, cancelamento ou consultas relativas às transações entre o cliente, o intermediador e a empresa de cartão de crédito ou instituição bancária.",
+          "3.5.1 Optando por pagamento através de um intermediador, a pessoa é responsável pelo cumprimento das cláusulas contratuais vigentes pelo intermediador, não sendo a ElevareQPZ responsável por aprovação, cancelamento ou consultas relativas às transações entre o cliente, o intermediador e a empresa de cartão de crédito ou instituição bancária.",
       },
       {
         type: "subtitle",
@@ -181,7 +181,7 @@ const sections: Section[] = [
       {
         type: "text",
         value:
-          "3.6.3 O reembolso de recursos de compras duplicadas ou devolução por desistência deve ser solicitado pelo cliente. O reembolso para pagamentos provenientes do intermediador é feito pela equipe da (nome da plataforma) através do próprio intermediador e a devolução do valor integral ocorre como crédito nas próximas faturas do cliente. Para pagamentos feitos via boleto bancário, a devolução é feita através de depósito ou transferência na conta corrente do cliente em um prazo de até 15 dias úteis após solicitação.",
+          "3.6.3 O reembolso de recursos de compras duplicadas ou devolução por desistência deve ser solicitado pelo cliente. O reembolso para pagamentos provenientes do intermediador é feito pela equipe da ElevareQPZ através do próprio intermediador e a devolução do valor integral ocorre como crédito nas próximas faturas do cliente. Para pagamentos feitos via boleto bancário, a devolução é feita através de depósito ou transferência na conta corrente do cliente em um prazo de até 15 dias úteis após solicitação.",
       },
       {
         type: "text",
@@ -234,13 +234,13 @@ const sections: Section[] = [
       {
         type: "text",
         value:
-          "4.2.4 O suporte da (nome da plataforma) sente-se no direito de não prestar o suporte caso a dúvida não esteja relacionada com a plataforma.",
+          "4.2.4 O suporte da ElevareQPZ sente-se no direito de não prestar o suporte caso a dúvida não esteja relacionada com a plataforma.",
       },
       {
         type: "subtitle",
         title: "4.3 Versão dos softwares:",
         value:
-          "4.3.1 O cliente deverá usar os softwares nas mesmas versões ensinadas nos cursos. É de responsabilidade do cliente conferir as versões de cada software ensinado na página do curso. A (nome da plataforma) sente-se no direito de não prestar o suporte caso o cliente esteja usando uma versão de software diferente das usadas nos cursos.",
+          "4.3.1 O cliente deverá usar os softwares nas mesmas versões ensinadas nos cursos. É de responsabilidade do cliente conferir as versões de cada software ensinado na página do curso. A ElevareQPZ sente-se no direito de não prestar o suporte caso o cliente esteja usando uma versão de software diferente das usadas nos cursos.",
       },
       {
         type: "text",
@@ -269,52 +269,52 @@ const sections: Section[] = [
       {
         type: "text",
         value:
-          "5.1 A (nome da plataforma) é proprietária da plataforma e seus Serviços, bem como itens tais como logotipos, API, códigos e conteúdo criados pela própria. É proibido adulterá-los ou usá-los sem autorização.",
+          "5.1 A ElevareQPZ é proprietária da plataforma e seus Serviços, bem como itens tais como logotipos, API, códigos e conteúdo criados pela própria. É proibido adulterá-los ou usá-los sem autorização.",
       },
       {
         type: "text",
         value:
-          "5.2 Todos os direitos, títulos e participações referentes à plataforma, serviços da (nome da plataforma) e bancos de dados são e continuarão sendo propriedade exclusiva da (nome da plataforma).",
+          "5.2 Todos os direitos, títulos e participações referentes à plataforma, serviços da ElevareQPZ e bancos de dados são e continuarão sendo propriedade exclusiva da ElevareQPZ.",
       },
       {
         type: "text",
         value:
-          "5.3 Nossa plataforma e serviços são protegidos pelas leis de direitos autorais, marcas comerciais e outras leis nacionais. Nada concederá ao usuário o direito de usar o nome da (noma da plataforma) ou de qualquer uma das marcas comerciais, logotipos, nomes de domínio e outras características distintivas da marca (nome da plataforma).",
+          "5.3 Nossa plataforma e serviços são protegidos pelas leis de direitos autorais, marcas comerciais e outras leis nacionais. Nada concederá ao usuário o direito de usar o nome da (noma da plataforma) ou de qualquer uma das marcas comerciais, logotipos, nomes de domínio e outras características distintivas da marca ElevareQPZ.",
       },
       {
         type: "text",
         value:
-          "5.4 Qualquer feedback ou comentário que, por ventura, seja fornecido pelo usuário sobre a (nome da plataforma) é totalmente voluntário. A (nome da plataforma) terá a liberdade de usar qualquer feedback ou comentário que julgue conveniente, sem obrigação sobre o usuário.",
+          "5.4 Qualquer feedback ou comentário que, por ventura, seja fornecido pelo usuário sobre a ElevareQPZ é totalmente voluntário. A ElevareQPZ terá a liberdade de usar qualquer feedback ou comentário que julgue conveniente, sem obrigação sobre o usuário.",
       },
       {
         type: "text",
         value:
-          "5.5 Ao acessar ou usar a plataforma ou os Serviços da (nome da plataforma), é proibido:",
+          "5.5 Ao acessar ou usar a plataforma ou os Serviços da ElevareQPZ, é proibido:",
       },
       {
         type: "list",
         items: [
           {
-            text: "acessar, adulterar ou usar áreas não públicas da plataforma (inclusive armazenamento de conteúdo), sistemas informáticos da (nome da plataforma) ou sistemas de entrega técnica dos provedores de serviços da (nome da plataforma)",
+            text: "acessar, adulterar ou usar áreas não públicas da plataforma (inclusive armazenamento de conteúdo), sistemas informáticos da ElevareQPZ ou sistemas de entrega técnica dos provedores de serviços da ElevareQPZ",
           },
           {
             text: "desativar, interferir em ou tentar burlar qualquer recurso da plataforma relacionado a segurança ou investigar, verificar ou testar a vulnerabilidade de qualquer um dos nossos sistemas.",
           },
           {
-            text: "copiar, modificar, criar obras derivadas, praticar engenharia reversa, praticar montagem reversa ou, de alguma forma, tentar decifrar qualquer código-fonte ou conteúdo da plataforma ou dos Serviços da (nome da plataforma).",
+            text: "copiar, modificar, criar obras derivadas, praticar engenharia reversa, praticar montagem reversa ou, de alguma forma, tentar decifrar qualquer código-fonte ou conteúdo da plataforma ou dos Serviços da ElevareQPZ.",
           },
           {
             text: "acessar, pesquisar ou tentar acessar ou pesquisar nossa plataforma por qualquer meio (automatizado ou não). É proibido usar meios de scrape, spider, robôs ou outros meios automatizados, de qualquer tipo, para acessar os Serviços.",
           },
           {
-            text: "de alguma forma, usar os Serviços para enviar informações de identificação da origem alteradas, enganosas ou falsas (como o envio de comunicações por e-mail que pareçam falsamente ser da (nome da plataforma)); ou interferir no acesso, ou interrompê-lo (ou tentar fazê-lo), de qualquer usuário, host ou rede, inclusive, entre outros, o envio de vírus, sobrecarga, flooding, spam ou bombardeios de e-mail nas plataformas ou serviços, ou de alguma forma interferir ou criar uma carga indevida sobre os Serviços.",
+            text: "de alguma forma, usar os Serviços para enviar informações de identificação da origem alteradas, enganosas ou falsas (como o envio de comunicações por e-mail que pareçam falsamente ser da ElevareQPZ); ou interferir no acesso, ou interrompê-lo (ou tentar fazê-lo), de qualquer usuário, host ou rede, inclusive, entre outros, o envio de vírus, sobrecarga, flooding, spam ou bombardeios de e-mail nas plataformas ou serviços, ou de alguma forma interferir ou criar uma carga indevida sobre os Serviços.",
           },
         ],
       },
       {
         type: "text",
         value:
-          "5.6 Os cursos online possuem um bloqueio para download podendo ser visualizados apenas dentro da plataforma de ensino da (nome da plataforma).",
+          "5.6 Os cursos online possuem um bloqueio para download podendo ser visualizados apenas dentro da plataforma de ensino da ElevareQPZ.",
       },
       {
         type: "text",
@@ -346,7 +346,7 @@ const sections: Section[] = [
       {
         type: "text",
         value:
-          "6.1 O cliente concorda que, ao se cadastrar, acessar ou usar nossa Plataforma, aceita firmar um contrato jurídico com a (nome da plataforma).",
+          "6.1 O cliente concorda que, ao se cadastrar, acessar ou usar nossa Plataforma, aceita firmar um contrato jurídico com a ElevareQPZ.",
       },
       {
         type: "text",
@@ -460,10 +460,10 @@ export default function TermsPage() {
         <main className="container mx-auto px-4 py-12 md:px-6 md:py-16">
           <div className="mx-auto max-w-3xl space-y-8">
             <p className="leading-relaxed text-muted-foreground">
-              Bem-vindo à (nome da plataforma). Estes Termos de Uso estabelecem
-              as regras e condições para utilização da nossa plataforma de
-              cursos e treinamentos corporativos em Recursos Humanos. Leia
-              atentamente antes de prosseguir.
+              Bem-vindo à ElevareQPZ. Estes Termos de Uso estabelecem as regras
+              e condições para utilização da nossa plataforma de cursos e
+              treinamentos corporativos em Recursos Humanos. Leia atentamente
+              antes de prosseguir.
             </p>
 
             {sections.map((section) => {

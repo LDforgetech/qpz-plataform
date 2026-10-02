@@ -16,7 +16,7 @@ export default function Logo({
   return (
     <Link href="/" {...props}>
       <Image
-        className="w-full overflow-hidden"
+        className="overflow-hidden"
         width={width}
         height={height}
         src={icon ? logo_icon : logo}

@@ -3,16 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useCourses } from "@/hooks/useCourses";
 import { useTrails } from "@/hooks/useTrails";
-import {
-  Play,
-  Clock,
-  Award,
-  TrendingUp,
-  Sparkles,
-  BookOpen,
-  ChevronRight,
-  Layers,
-} from "lucide-react";
+import { Play, Sparkles, BookOpen, ChevronRight, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DiagnosticForm from "@/components/diagnostic-form";
 import { useUser } from "@clerk/nextjs";
@@ -86,7 +77,7 @@ const Dashboard = () => {
               <Button
                 size="lg"
                 onClick={() => setDiagnosticOpen(true)}
-                className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold shadow-[var(--shadow-gold)]"
+                className="bg-accent text-accent-foreground  font-semibold shadow-[var(--shadow-gold)]"
               >
                 <Sparkles size={18} />
                 Iniciar diagnóstico
@@ -154,7 +145,7 @@ const Dashboard = () => {
                         {course.description}
                       </p>
 
-                      <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground mt-auto p-2 rounded-md w-fit transition-colors duration-300 group-hover:bg-accent group-hover:text-foreground">
+                      <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground mt-auto p-2 rounded-md w-fit transition-colors duration-300 group-hover:bg-accent group-hover:text-white">
                         <Play size={12} /> Acessar curso
                       </div>
                     </div>

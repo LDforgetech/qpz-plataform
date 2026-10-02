@@ -1,10 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap");
+
 @import "tailwindcss-animate";
+
 /* @import "shadcn/tailwind.css"; */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+html {
+  scroll-behavior: smooth;
+}
 @layer base {
   :root {
     --background: 220 20% 97%;
@@ -16,6 +21,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 40% 13%;
 
+    /* Laranja principal da identidade */
     --primary: 220 60% 18%;
     --primary-foreground: 40 60% 95%;
 
@@ -25,36 +31,55 @@
     --muted: 220 15% 94%;
     --muted-foreground: 220 10% 46%;
 
-    --accent: 38 80% 55%;
-    --accent-foreground: 220 60% 12%;
+    /* Laranja usado no site */
+    --accent: 20 74% 50%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 220 18% 88%;
     --input: 220 18% 88%;
-    --ring: 38 80% 55%;
+
+    /* Laranja como cor de foco */
+    --ring: 20 74% 50%;
 
     --radius: 0.75rem;
 
-    --gold: 38 80% 55%;
-    --gold-light: 40 70% 70%;
-    --gold-dark: 36 85% 42%;
+    /* Identidade visual */
+    --orange: 20 74% 50%;
+    --orange-light: 26 96% 65%;
+    --orange-dark: 23 99% 40%;
+
+    /* Azul estrutural */
     --navy: 220 60% 18%;
     --navy-light: 220 40% 30%;
     --navy-dark: 220 65% 10%;
 
+    /* Gradiente principal */
     --gradient-hero: linear-gradient(
       135deg,
       hsl(220 60% 18%),
       hsl(220 40% 28%)
     );
-    --gradient-gold: linear-gradient(135deg, hsl(38 80% 55%), hsl(40 70% 65%));
+
+    /* Gradiente laranja */
+    --gradient-orange: linear-gradient(
+      135deg,
+      hsl(23 99% 40%),
+      hsl(20 74% 50%),
+      hsl(26 96% 65%)
+    );
+
+    /* Gradiente para cards */
     --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(220 20% 97%));
 
+    /* Sombras */
     --shadow-card: 0 4px 24px -4px hsl(220 60% 18% / 0.08);
+
     --shadow-card-hover: 0 12px 40px -8px hsl(220 60% 18% / 0.15);
-    --shadow-gold: 0 8px 30px -6px hsl(38 80% 55% / 0.35);
+
+    --shadow-orange: 0 8px 30px -6px hsl(20 74% 50% / 0.35);
 
     --font-display: "Playfair Display", serif;
     --font-body: "Inter", sans-serif;
@@ -66,7 +91,7 @@
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 20 74% 50%;
   }
 }
 
@@ -74,10 +99,12 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body);
   }
+
   h1,
   h2,
   h3 {

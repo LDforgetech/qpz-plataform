@@ -23,7 +23,7 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
       <div className="container mx-auto flex items-center justify-between h-16">
-        <Logo />
+        <Logo width={280} />
         <div className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <a
@@ -72,7 +72,7 @@ const Navbar = () => {
             )}
             {isSignedIn && !isSubLoading && data?.is_active && (
               <Link href="./dashboard">
-                <Button className="bg-accent text-accent-foreground hover:bg-gold-dark h-8">
+                <Button className="bg-accent text-accent-foreground h-8">
                   Dashboard
                 </Button>
               </Link>

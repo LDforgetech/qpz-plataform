@@ -42,7 +42,7 @@ const Hero = () => (
             <a href="\#planos">
               <Button
                 size="lg"
-                className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold shadow-[var(--shadow-gold)] text-base px-8"
+                className="bg-accent text-accent-foreground hover:bg-accent/70 font-semibold shadow-sm text-base"
               >
                 Explorar Planos
                 <ArrowRight size={18} className="ml-2" />

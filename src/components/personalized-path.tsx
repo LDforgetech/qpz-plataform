@@ -64,7 +64,7 @@ const PersonalizedPath = () => {
 
       <div className="container mx-auto px-4 relative">
         <div className="max-w-3xl mx-auto text-center mb-14">
-          <span className="inline-flex items-center gap-2 bg-accent/15 text-accent-foreground/90 text-xs font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-5">
+          <span className="inline-flex items-center gap-2 bg-accent/15 text-primary text-xs font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-5">
             <Sparkles size={14} className="text-accent" />
             Exclusivo para alunos
           </span>
@@ -186,7 +186,10 @@ const PersonalizedPath = () => {
                   </div> */}
 
                   <a href="\#planos" className="flex items-center gap-2">
-                    <Button className="w-full bg-accent text-accent-foreground hover:bg-gold-dark font-semibold">
+                    <Button
+                      // variant="outline"
+                      className="w-full bg-accent text-accent-foreground hover:bg-accent/70 font-semibold shadow-sm"
+                    >
                       Ver planos e desbloquear
                       <ArrowRight size={16} />
                     </Button>

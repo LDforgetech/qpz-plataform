@@ -344,7 +344,7 @@ const CourseDetail = () => {
                   <Link href={`/curso/${id}/aulas`}>
                     <Button
                       size="lg"
-                      className="w-full bg-accent text-accent-foreground hover:bg-gold-dark font-semibold shadow-[var(--shadow-gold)]"
+                      className="w-full bg-accent text-accent-foreground font-semibold"
                     >
                       <Play size={18} fill="currentColor" />
                       Iniciar curso
@@ -459,10 +459,7 @@ const CourseDetail = () => {
                 como este.
               </p>
               <Link href="/minha-trilha">
-                <Button
-                  size="sm"
-                  className="w-full bg-accent text-accent-foreground hover:bg-gold-dark font-semibold"
-                >
+                <Button size="sm" className="w-full  font-semibold">
                   Iniciar diagnóstico
                 </Button>
               </Link>

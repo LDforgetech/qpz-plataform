@@ -64,12 +64,12 @@ export default function Testimonials() {
           </span>
 
           <h2 className="mt-2 text-3xl md:text-4xl font-display font-bold text-foreground">
-            O que dizem nossos alunos
+            O que dizem sobre nós
           </h2>
 
           <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
             Profissionais de RH de diferentes empresas já transformaram suas
-            carreiras com a CapitalHumano.
+            carreiras com a ElevareQPZ.
           </p>
         </motion.div>
 
